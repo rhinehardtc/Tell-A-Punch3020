@@ -8,8 +8,8 @@ export default function ComboConsole(props) {
         for(let i = 0; i < combo.length; i++ ){
             displayArr.push(combo[i])
         }
-        for(let i = 5-combo.length; i < 5; i++){
-            displayArr.push("#")
+        for(let i = 0; i < 5 - combo.length; i++){
+            displayArr.push("✘")
         }
     }
     
