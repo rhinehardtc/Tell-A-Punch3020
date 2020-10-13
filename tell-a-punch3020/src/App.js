@@ -31,16 +31,11 @@ export default class App extends React.Component {
   keyPress = 
     window.addEventListener('keydown', (e) => this.keyLogger(e));
 
-  bundle = (
-    this.connectedController,
-    this.disconnectedController,
-    this.keyPress
-  )
 
   render(){
     return (
       <div className="App">
-        <header className="App-header" onFocus={this.bundle}>
+        <header className="App-header">
         </header>
       </div>
     )
