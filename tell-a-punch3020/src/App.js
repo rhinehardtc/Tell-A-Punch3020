@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import ComboConsole from "./ComboConsole";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      maxLength: 5,
+      round: 1,
+      comboArray: [],
+    };
+  }
+
+  keyLogger = (event) => {
+    console.log(event.key);
+    this.state.comboArray.length === this.state.maxLength
+      ? this.setState({ comboArray: [] })
+      : this.setState({ comboArray: [...this.state.comboArray, event.key] });
+  };
+
+  connectedController = window.addEventListener("gamepadconnected", (e) => {
+    console.log(
+      "Gamepad connected at index %d: %s. %d buttons, %d axes.",
+      e.gamepad.index,
+      e.gamepad.id,
+      e.gamepad.buttons.length,
+      e.gamepad.axes.length
+    );
+  });
+
+  disconnectedController = window.addEventListener(
+    "gamepaddisconnected",
+    function (e) {
+      console.log(
+        "Gamepad disconnected from index %d: %s",
+        e.gamepad.index,
+        e.gamepad.id
+      );
+    }
   );
-}
 
-export default App;
+  keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <ComboConsole combo={this.state.comboArray} />
+          {this.state.key}
+        </header>
+      </div>
+    );
+  }
+}
