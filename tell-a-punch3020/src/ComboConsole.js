@@ -1,5 +1,5 @@
 import React from "react";
-
+import Input from "./Input.js"
 
 export default function ComboConsole(props) {
     let {combo} = props;
@@ -9,12 +9,14 @@ export default function ComboConsole(props) {
             displayArr.push(combo[i])
         }
         for(let i = 0; i < 5 - combo.length; i++){
-            displayArr.push("✘")
+            displayArr.push(" ")
         }
     }
     
     fillSlots()
 return(
-    displayArr.map((key) => <div>_{key}_</div>)
-)
+    <div>
+        {displayArr.map((input) => <Input input={input}/>)}
+    </div>
+    )
 }
