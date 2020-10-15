@@ -8,7 +8,8 @@ export default class App extends React.Component {
     this.state = {
       maxLength: 5,
       round: 1,
-      comboArray: [],
+      comboArray1: [],
+      comboArray2: [],
       gamePad: {
         id: "no gamepad connected",
         buttons: [
@@ -20,9 +21,20 @@ export default class App extends React.Component {
 
   keyLogger = (event) => {
     console.log(event.key);
-    this.state.comboArray.length === this.state.maxLength
-      ? this.setState({ comboArray: [] })
-      : this.setState({ comboArray: [...this.state.comboArray, event.key] });
+    const p1Keys = ['1','2','3','4','q','w','e','r']
+    const p2Keys = ['7','8','9','0','u','i','o','p']
+
+    if (p1Keys.includes(event.key) && this.state.comboArray1.length !== this.state.maxLength){
+      this.setState({ comboArray1: [...this.state.comboArray1, event.key] })
+    } else if (p1Keys.includes(event.key) && this.state.comboArray1.length === this.state.maxLength) {
+      this.setState({ comboArray1: [] })
+    }
+
+    if (p2Keys.includes(event.key) && this.state.comboArray2.length !== this.state.maxLength){
+      this.setState({ comboArray2: [...this.state.comboArray2, event.key] })
+    } else if (p2Keys.includes(event.key) && this.state.comboArray2.length === this.state.maxLength) {
+      this.setState({ comboArray2: [] })
+    }
   };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
@@ -67,11 +79,12 @@ export default class App extends React.Component {
           <div className="button_list">
             <ol>
               {this.state.gamePad.buttons 
-               ? this.state.gamePad.buttons.map(button => <li>{String(button.pressed)}</li>) 
+               ? this.state.gamePad.buttons.map(button => <li key={this.state.gamePad.buttons.indexOf(button)}>{String(button.pressed)}</li>) 
                : <li>"no gamepad, no buttons"</li>}
             </ol>
           </div>
-          <ComboConsole combo={this.state.comboArray} />
+          <ComboConsole combo={this.state.comboArray1} />
+          <ComboConsole combo={this.state.comboArray2} />
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>
