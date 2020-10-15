@@ -19,3 +19,16 @@ code {
   color: red;
   font-family: 'Press Start 2P';
 }
+
+.gamepad_display {
+  margin: 0;
+  background-color: #282c34;
+  color: red;
+}
+
+.button_list {
+  float: left;
+  background-color: #282c34;
+  color: red;
+  margin-right: 20px;
+}
