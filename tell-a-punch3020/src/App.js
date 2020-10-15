@@ -12,10 +12,7 @@ export default class App extends React.Component {
       gamePad: {
         id: "no gamepad connected",
         buttons: [
-          {pressed: false, touched: false, value: 0},
-          {pressed: false, touched: false, value: 0},
-          {pressed: false, touched: false, value: 0},
-          {pressed: false, touched: false, value: 0}
+          {pressed: "no gamepad, no buttons"}
         ]
       }
     };
@@ -67,7 +64,13 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div className="button_list"><ol>{this.state.gamePad.buttons.map(button => <li>{String(button.pressed)}</li>)}</ol></div>
+          <div className="button_list">
+            <ol>
+              {this.state.gamePad.buttons 
+               ? this.state.gamePad.buttons.map(button => <li>{String(button.pressed)}</li>) 
+               : <li>"no gamepad, no buttons"</li>}
+            </ol>
+          </div>
           <ComboConsole combo={this.state.comboArray} />
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
