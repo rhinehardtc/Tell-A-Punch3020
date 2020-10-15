@@ -21,18 +21,19 @@ export default class App extends React.Component {
 
   keyLogger = (event) => {
     console.log(event.key);
-    const p1Keys = ['1','2','3','4','q','w','e','r']
-    const p2Keys = ['7','8','9','0','u','i','o','p']
+    const p1Keys = {'1': 'A','2': 'B','3': 'X','4': 'Y','q': '▼','w': '▶︎','e': '◀︎','r': '▲'}
+    const p2Keys = {'7': 'A','8': 'B','9': 'X','0': 'Y','u': '▼','i': '▶︎','o': '◀︎','p': '▲'}
+    const displayedInputs = ['A','B','X','Y','▼','▶︎','◀︎','▲']
 
-    if (p1Keys.includes(event.key) && this.state.comboArray1.length !== this.state.maxLength){
-      this.setState({ comboArray1: [...this.state.comboArray1, event.key] })
-    } else if (p1Keys.includes(event.key) && this.state.comboArray1.length === this.state.maxLength) {
+    if (p1Keys[event.key] && this.state.comboArray1.length !== this.state.maxLength){
+      this.setState({ comboArray1: [...this.state.comboArray1, p1Keys[event.key]] })
+    } else if (p1Keys[event.key] && this.state.comboArray1.length === this.state.maxLength) {
       this.setState({ comboArray1: [] })
     }
 
-    if (p2Keys.includes(event.key) && this.state.comboArray2.length !== this.state.maxLength){
-      this.setState({ comboArray2: [...this.state.comboArray2, event.key] })
-    } else if (p2Keys.includes(event.key) && this.state.comboArray2.length === this.state.maxLength) {
+    if (p2Keys[event.key] && this.state.comboArray2.length !== this.state.maxLength){
+      this.setState({ comboArray2: [...this.state.comboArray2, p2Keys[event.key]] })
+    } else if (p2Keys[event.key] && this.state.comboArray2.length === this.state.maxLength) {
       this.setState({ comboArray2: [] })
     }
   };

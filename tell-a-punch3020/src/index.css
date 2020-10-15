@@ -21,19 +21,24 @@ code {
   width: 50px;
   height: 50px;
   border: 5px ridge red;
-  box-shadow: 0 0 10px rgb(255, 80, 80);
+  box-shadow: 0 0 8px rgb(255, 80, 80);
   color: red;
-  text-shadow: 0 0 10px rgb(255, 80, 80);
+  background-color: rgba(255, 0, 0, 0.11);
+
+  text-shadow: 0 0 4px rgb(255, 80, 80);
   font-family: 'Press Start 2P';
+
   margin-right: 20px;
 }
 
 .p2_input_box {
   width: 50px;
   height: 50px;
-  border: 5px ridge blue;
+  border: 5px ridge rgb(61, 97, 255);
   box-shadow: 0 0 10px rgb(61, 97, 255);
-  color: blue;
+  color: rgb(61, 97, 255);
+  background-color: rgba(0, 0, 255, 0.089);
+
   text-shadow: 0 0 8px rgb(61, 97, 255);
   font-family: 'Press Start 2P';
 }
