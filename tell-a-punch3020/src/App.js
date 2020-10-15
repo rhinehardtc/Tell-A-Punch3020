@@ -75,16 +75,23 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <div className="button_list">
+        <div className="p1_button_list">
             <ol>
               {this.state.gamePad.buttons 
                ? this.state.gamePad.buttons.map(button => <li key={this.state.gamePad.buttons.indexOf(button)}>{String(button.pressed)}</li>) 
                : <li>"no gamepad, no buttons"</li>}
             </ol>
-          </div>
-          <ComboConsole combo={this.state.comboArray1} />
-          <ComboConsole combo={this.state.comboArray2} />
+        </div>
+        <div className="p2_button_list">
+            <ol>
+              {this.state.gamePad.buttons 
+               ? this.state.gamePad.buttons.map(button => <li key={this.state.gamePad.buttons.indexOf(button)}>{String(button.pressed)}</li>) 
+               : <li>"no gamepad, no buttons"</li>}
+            </ol>
+        </div>
+        <header className="App-header">
+          <ComboConsole combo={this.state.comboArray1} p1={true}/>
+          <ComboConsole combo={this.state.comboArray2} p2={true}/>
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>

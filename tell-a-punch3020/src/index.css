@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #282c34;
 }
 
 code {
@@ -12,7 +13,7 @@ code {
     monospace;
 }
 
-.input_box {
+.p1_input_box {
   width: 50px;
   height: 50px;
   border: 5px ridge red;
@@ -21,15 +22,32 @@ code {
   margin-right: 20px;
 }
 
+.p2_input_box {
+  width: 50px;
+  height: 50px;
+  border: 5px ridge blue;
+  color: blue;
+  font-family: 'Press Start 2P';
+}
+
 .gamepad_display {
   margin: 0;
   background-color: #282c34;
   color: red;
 }
 
-.button_list {
+.p1_button_list {
+  display: flex;
   float: left;
   background-color: #282c34;
   color: red;
-  margin-right: 20px;
+  margin: 0;
+}
+
+.p2_button_list {
+  display: flex;
+  float: right;
+  background-color: #282c34;
+  color: blue;
+  margin: 0;
 }
