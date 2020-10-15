@@ -9,6 +9,15 @@ export default class App extends React.Component {
       maxLength: 5,
       round: 1,
       comboArray: [],
+      gamePad: {
+        id: "no gamepad connected",
+        buttons: [
+          {pressed: false, touched: false, value: 0},
+          {pressed: false, touched: false, value: 0},
+          {pressed: false, touched: false, value: 0},
+          {pressed: false, touched: false, value: 0}
+        ]
+      }
     };
   }
 
@@ -42,13 +51,26 @@ export default class App extends React.Component {
 
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
+  update = () => {
+    const gamepads = navigator.getGamepads()
+
+    gamepads[0] 
+    ? this.setState({gamePad: gamepads[0]}) 
+    : this.setState(prevState => ({gamePad: {...prevState.gamePad, id: 'no gamepad connected'}}))
+
+    window.requestAnimationFrame(this.update)
+  }
+
+  runUpdate = window.requestAnimationFrame(this.update);
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
+          <div className="button_list"><ol>{this.state.gamePad.buttons.map(button => <li>{String(button.pressed)}</li>)}</ol></div>
           <ComboConsole combo={this.state.comboArray} />
-          {this.state.key}
         </header>
+        <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>
     );
   }
