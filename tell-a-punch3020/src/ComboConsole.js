@@ -16,7 +16,7 @@ export default function ComboConsole(props) {
     fillSlots()
 return(
     <div>
-        {displayArr.map((input) => <Input input={input}/>)}
+        {displayArr.map((input) => props.p1 ? <Input key={Math.random() * 10000} input={input} p1={true}/> : <Input key={Math.random() * 10000} input={input} p2={true}/>)}
     </div>
     )
 }

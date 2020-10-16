@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #282c34;
 }
 
 code {
@@ -12,11 +13,33 @@ code {
     monospace;
 }
 
-.input_box {
+::-webkit-scrollbar {
+  display: none
+}
+
+.p1_input_box {
   width: 50px;
   height: 50px;
   border: 5px ridge red;
+  box-shadow: 0 0 8px rgb(255, 80, 80);
   color: red;
+  background-color: rgba(255, 0, 0, 0.11);
+
+  text-shadow: 0 0 4px rgb(255, 80, 80);
+  font-family: 'Press Start 2P';
+
+  margin-right: 20px;
+}
+
+.p2_input_box {
+  width: 50px;
+  height: 50px;
+  border: 5px ridge rgb(61, 97, 255);
+  box-shadow: 0 0 10px rgb(61, 97, 255);
+  color: rgb(61, 97, 255);
+  background-color: rgba(0, 0, 255, 0.089);
+
+  text-shadow: 0 0 8px rgb(61, 97, 255);
   font-family: 'Press Start 2P';
 }
 
@@ -26,9 +49,22 @@ code {
   color: red;
 }
 
-.button_list {
+.p1_button_list {
+  display: flex;
   float: left;
   background-color: #282c34;
   color: red;
-  margin-right: 20px;
+  margin: 0;
+}
+
+.p2_button_list {
+  display: flex;
+  float: right;
+  background-color: #282c34;
+  color: blue;
+  margin: 0;
+}
+
+.p2_button_list ol {
+  padding-inline-end: 20px;
 }
