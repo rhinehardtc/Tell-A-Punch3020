@@ -39,7 +39,7 @@ export default class App extends React.Component {
       o: "◀︎",
       p: "▲",
     };
-    const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
+    // const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
 
     if (
       p1Keys[event.key] &&
@@ -100,7 +100,7 @@ export default class App extends React.Component {
       this.setState({ gamePad: gamepads[0] });
 
       this.state.gamePad.buttons.forEach((button) => {
-        if (button.pressed) {
+        if (button.pressed && button.value === 1.0) {
           switch (this.state.gamePad.buttons.indexOf(button)) {
             case 0:
               this.keyLogger({ key: "1" });
@@ -125,6 +125,9 @@ export default class App extends React.Component {
               break;
             case 7:
               this.keyLogger({ key: "r" });
+              break;
+            default:
+              console.log('');
           }
         }
       });

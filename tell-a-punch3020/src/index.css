@@ -18,6 +18,11 @@ code {
 }
 
 .p1_input_box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
   width: 50px;
   height: 50px;
   border: 5px ridge red;
@@ -32,6 +37,11 @@ code {
 }
 
 .p2_input_box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
   width: 50px;
   height: 50px;
   border: 5px ridge rgb(61, 97, 255);
