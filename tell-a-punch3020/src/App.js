@@ -14,6 +14,8 @@ export default class App extends React.Component {
         id: "no gamepad connected",
         buttons: [{ pressed: "no gamepad, no buttons" }],
       },
+      btnPressCount: 0,
+      anyBtnPress: false,
     };
   }
 
@@ -100,37 +102,53 @@ export default class App extends React.Component {
       this.setState({ gamePad: gamepads[0] });
 
       this.state.gamePad.buttons.forEach((button) => {
-        if (button.pressed && button.value === 1.0) {
-          switch (this.state.gamePad.buttons.indexOf(button)) {
-            case 0:
-              this.keyLogger({ key: "1" });
-              break;
-            case 1:
-              this.keyLogger({ key: "2" });
-              break;
-            case 2:
-              this.keyLogger({ key: "3" });
-              break;
-            case 3:
-              this.keyLogger({ key: "4" });
-              break;
-            case 4:
-              this.keyLogger({ key: "q" });
-              break;
-            case 5:
-              this.keyLogger({ key: "w" });
-              break;
-            case 6:
-              this.keyLogger({ key: "e" });
-              break;
-            case 7:
-              this.keyLogger({ key: "r" });
-              break;
-            default:
-              console.log('');
-          }
+        if(button.pressed && button.value === 1.0){
+          this.setState({anyBtnPress: true})
         }
       });
+
+      if(this.state.anyBtnPress){
+        this.state.gamePad.buttons.forEach((button) => {
+          if (button.pressed && button.value === 1.0 && this.state.btnPressCount < 3) {
+            this.setState({btnPressCount: this.state.btnPressCount + 1});
+          } else {
+            if (button.pressed && button.value === 1.0 && this.state.btnPressCount === 3){
+              switch (this.state.gamePad.buttons.indexOf(button)) {
+                case 0:
+                  this.keyLogger({ key: "1" });
+                  break;
+                case 1:
+                  this.keyLogger({ key: "2" });
+                  break;
+                case 2:
+                  this.keyLogger({ key: "3" });
+                  break;
+                case 3:
+                  this.keyLogger({ key: "4" });
+                  break;
+                case 4:
+                  this.keyLogger({ key: "q" });
+                  break;
+                case 5:
+                  this.keyLogger({ key: "w" });
+                  break;
+                case 6:
+                  this.keyLogger({ key: "e" });
+                  break;
+                case 7:
+                  this.keyLogger({ key: "r" });
+                  break;
+                default:
+                  console.log('');
+              };
+              this.setState({btnPressCount: 0});
+            }
+          }
+        })
+        this.setState({anyBtnPress: false});
+      } else {
+        this.setState({btnPressCount: 0});
+      };
 
     } else {
       this.setState((prevState) => ({
