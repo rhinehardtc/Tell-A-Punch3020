@@ -14,7 +14,7 @@ export default class App extends React.Component {
         id: "no gamepad connected",
         buttons: [{ pressed: "no gamepad, no buttons" }],
       },
-      btnPressCount: 0,
+      whichBtnPress: "",
       anyBtnPress: false,
     };
   }
@@ -95,6 +95,10 @@ export default class App extends React.Component {
 
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
+  // press button -> anyBtnPress turns true and triggers
+  // if button pressed, start a counter. On 3, send it thru switch to keyLog, then into state
+
+  // instead, if btn pressed, check to see if it is already in state, if not, send it thru switch to keyLog/state
   update = () => {
     const gamepads = navigator.getGamepads();
 
@@ -109,10 +113,8 @@ export default class App extends React.Component {
 
       if(this.state.anyBtnPress){
         this.state.gamePad.buttons.forEach((button) => {
-          if (button.pressed && button.value === 1.0 && this.state.btnPressCount < 3) {
-            this.setState({btnPressCount: this.state.btnPressCount + 1});
-          } else {
-            if (button.pressed && button.value === 1.0 && this.state.btnPressCount === 3){
+          if (button.pressed && button.value === 1.0 && this.state.whichBtnPress === "") {
+            this.setState({whichBtnPress: button});
               switch (this.state.gamePad.buttons.indexOf(button)) {
                 case 0:
                   this.keyLogger({ key: "1" });
@@ -140,14 +142,14 @@ export default class App extends React.Component {
                   break;
                 default:
                   console.log('');
-              };
-              this.setState({btnPressCount: 0});
+              }
+              this.setState({whichBtnPress: ""})
             }
           }
-        })
+        )
         this.setState({anyBtnPress: false});
       } else {
-        this.setState({btnPressCount: 0});
+        this.setState({whichBtnPress: ""});
       };
 
     } else {
