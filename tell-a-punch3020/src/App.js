@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import ComboConsole from "./ComboConsole";
+import TurnDisplay from "./TurnDisplay";
 
 export default class App extends React.Component {
   constructor() {
@@ -16,11 +17,17 @@ export default class App extends React.Component {
       },
       whichBtnPress: "",
       anyBtnPress: false,
+      turn: "",
+      phase: "",
     };
   }
 
+  //turn: P1, P2
+  //phases: cntDwn(no inputs), atk(Px inputs only), cntDwn(no inputs), def(Py inputs, display Px pattern)
+
   keyLogger = (event) => {
     console.log(event.key);
+    let input = event.key;
     const p1Keys = {
       1: "A",
       2: "B",
@@ -43,33 +50,67 @@ export default class App extends React.Component {
     };
     // const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
 
-    if (
-      p1Keys[event.key] &&
-      this.state.comboArray1.length !== this.state.maxLength
-    ) {
-      this.setState({
-        comboArray1: [...this.state.comboArray1, p1Keys[event.key]],
-      });
-    } else if (
-      p1Keys[event.key] &&
-      this.state.comboArray1.length === this.state.maxLength
-    ) {
-      this.setState({ comboArray1: [] });
+    //insert transformed inputs into comboArrays or call end-of-input function
+    //Player 1
+    const p1ComboInsert = (k) => {
+      if (this.state.comboArray1.length < this.state.maxLength) {
+        this.setState({
+          comboArray1: [...this.state.comboArray1, k],
+        });
+      } else {
+        this.setState({ comboArray1: [] });
+      }
+    };
+
+    //Player 2
+    const p2ComboInsert = (k) => {
+      if (this.state.comboArray2.length < this.state.maxLength) {
+        this.setState({
+          comboArray2: [...this.state.comboArray2, k],
+        });
+      } else {
+        this.setState({ comboArray2: [] });
+      }
+    };
+
+    //take input, filter out unwanted keys, and transform into game output
+    if (p1Keys[input]) {
+      p1ComboInsert(p1Keys[input]);
+    } else if (p2Keys[input]) {
+      p2ComboInsert(p2Keys[input]);
     }
 
-    if (
-      p2Keys[event.key] &&
-      this.state.comboArray2.length !== this.state.maxLength
-    ) {
-      this.setState({
-        comboArray2: [...this.state.comboArray2, p2Keys[event.key]],
-      });
-    } else if (
-      p2Keys[event.key] &&
-      this.state.comboArray2.length === this.state.maxLength
-    ) {
-      this.setState({ comboArray2: [] });
-    }
+    //the following serves two purposes: filtering out unwanted keyboard inputs and handling
+    //the insertion logic for comboArrays
+    // Player 1
+    //   if (
+    //     p1Keys[event.key] &&
+    //     this.state.comboArray1.length !== this.state.maxLength
+    //   ) {
+    //     this.setState({
+    //       comboArray1: [...this.state.comboArray1, p1Keys[event.key]],
+    //     });
+    //   } else if (
+    //     p1Keys[event.key] &&
+    //     this.state.comboArray1.length === this.state.maxLength
+    //   ) {
+    //     this.setState({ comboArray1: [] });
+    //   }
+
+    //   //Player 2
+    //   if (
+    //     p2Keys[event.key] &&
+    //     this.state.comboArray2.length !== this.state.maxLength
+    //   ) {
+    //     this.setState({
+    //       comboArray2: [...this.state.comboArray2, p2Keys[event.key]],
+    //     });
+    //   } else if (
+    //     p2Keys[event.key] &&
+    //     this.state.comboArray2.length === this.state.maxLength
+    //   ) {
+    //     this.setState({ comboArray2: [] });
+    //   }
   };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
@@ -96,9 +137,7 @@ export default class App extends React.Component {
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
   // press button -> anyBtnPress turns true and triggers
-  // if button pressed, start a counter. On 3, send it thru switch to keyLog, then into state
-
-  // instead, if btn pressed, check to see if it is already in state, if not, send it thru switch to keyLog/state
+  // if btn pressed, check to see if it is already in state, if not, send it thru switch to keyLog/state
   update = () => {
     const gamepads = navigator.getGamepads();
 
@@ -106,52 +145,54 @@ export default class App extends React.Component {
       this.setState({ gamePad: gamepads[0] });
 
       this.state.gamePad.buttons.forEach((button) => {
-        if(button.pressed && button.value === 1.0){
-          this.setState({anyBtnPress: true})
+        if (button.pressed && button.value === 1.0) {
+          this.setState({ anyBtnPress: true });
         }
       });
 
-      if(this.state.anyBtnPress){
+      if (this.state.anyBtnPress) {
         this.state.gamePad.buttons.forEach((button) => {
-          if (button.pressed && button.value === 1.0 && this.state.whichBtnPress === "") {
-            this.setState({whichBtnPress: button});
-              switch (this.state.gamePad.buttons.indexOf(button)) {
-                case 0:
-                  this.keyLogger({ key: "1" });
-                  break;
-                case 1:
-                  this.keyLogger({ key: "2" });
-                  break;
-                case 2:
-                  this.keyLogger({ key: "3" });
-                  break;
-                case 3:
-                  this.keyLogger({ key: "4" });
-                  break;
-                case 4:
-                  this.keyLogger({ key: "q" });
-                  break;
-                case 5:
-                  this.keyLogger({ key: "w" });
-                  break;
-                case 6:
-                  this.keyLogger({ key: "e" });
-                  break;
-                case 7:
-                  this.keyLogger({ key: "r" });
-                  break;
-                default:
-                  console.log('');
-              }
-              this.setState({whichBtnPress: ""})
+          if (
+            button.pressed &&
+            button.value === 1.0 &&
+            this.state.whichBtnPress === ""
+          ) {
+            this.setState({ whichBtnPress: button });
+            switch (this.state.gamePad.buttons.indexOf(button)) {
+              case 0:
+                this.keyLogger({ key: "1" });
+                break;
+              case 1:
+                this.keyLogger({ key: "2" });
+                break;
+              case 2:
+                this.keyLogger({ key: "3" });
+                break;
+              case 3:
+                this.keyLogger({ key: "4" });
+                break;
+              case 4:
+                this.keyLogger({ key: "q" });
+                break;
+              case 5:
+                this.keyLogger({ key: "w" });
+                break;
+              case 6:
+                this.keyLogger({ key: "e" });
+                break;
+              case 7:
+                this.keyLogger({ key: "r" });
+                break;
+              default:
+                console.log("");
             }
+            this.setState({ whichBtnPress: "" });
           }
-        )
-        this.setState({anyBtnPress: false});
+        });
+        this.setState({ anyBtnPress: false });
       } else {
-        this.setState({whichBtnPress: ""});
-      };
-
+        this.setState({ whichBtnPress: "" });
+      }
     } else {
       this.setState((prevState) => ({
         gamePad: { ...prevState.gamePad, id: "no P1 gamepad connected" },
@@ -179,6 +220,15 @@ export default class App extends React.Component {
             )}
           </ol>
         </div>
+
+        <div className="turn_display">
+          <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+          ></link>
+          <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
+        </div>
+
         <div className="p2_button_list">
           <ol>
             {this.state.gamePad.buttons ? (
@@ -192,6 +242,7 @@ export default class App extends React.Component {
             )}
           </ol>
         </div>
+
         <header className="App-header">
           <ComboConsole combo={this.state.comboArray1} p1={true} />
           <ComboConsole combo={this.state.comboArray2} p2={true} />
