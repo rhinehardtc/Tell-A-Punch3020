@@ -14,6 +14,8 @@ export default class App extends React.Component {
         id: "no gamepad connected",
         buttons: [{ pressed: "no gamepad, no buttons" }],
       },
+      whichBtnPress: "",
+      anyBtnPress: false,
     };
   }
 
@@ -39,7 +41,7 @@ export default class App extends React.Component {
       o: "◀︎",
       p: "▲",
     };
-    const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
+    // const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
 
     if (
       p1Keys[event.key] &&
@@ -93,6 +95,10 @@ export default class App extends React.Component {
 
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
+  // press button -> anyBtnPress turns true and triggers
+  // if button pressed, start a counter. On 3, send it thru switch to keyLog, then into state
+
+  // instead, if btn pressed, check to see if it is already in state, if not, send it thru switch to keyLog/state
   update = () => {
     const gamepads = navigator.getGamepads();
 
@@ -100,34 +106,51 @@ export default class App extends React.Component {
       this.setState({ gamePad: gamepads[0] });
 
       this.state.gamePad.buttons.forEach((button) => {
-        if (button.pressed) {
-          switch (this.state.gamePad.buttons.indexOf(button)) {
-            case 0:
-              this.keyLogger({ key: "1" });
-              break;
-            case 1:
-              this.keyLogger({ key: "2" });
-              break;
-            case 2:
-              this.keyLogger({ key: "3" });
-              break;
-            case 3:
-              this.keyLogger({ key: "4" });
-              break;
-            case 4:
-              this.keyLogger({ key: "q" });
-              break;
-            case 5:
-              this.keyLogger({ key: "w" });
-              break;
-            case 6:
-              this.keyLogger({ key: "e" });
-              break;
-            case 7:
-              this.keyLogger({ key: "r" });
-          }
+        if(button.pressed && button.value === 1.0){
+          this.setState({anyBtnPress: true})
         }
       });
+
+      if(this.state.anyBtnPress){
+        this.state.gamePad.buttons.forEach((button) => {
+          if (button.pressed && button.value === 1.0 && this.state.whichBtnPress === "") {
+            this.setState({whichBtnPress: button});
+              switch (this.state.gamePad.buttons.indexOf(button)) {
+                case 0:
+                  this.keyLogger({ key: "1" });
+                  break;
+                case 1:
+                  this.keyLogger({ key: "2" });
+                  break;
+                case 2:
+                  this.keyLogger({ key: "3" });
+                  break;
+                case 3:
+                  this.keyLogger({ key: "4" });
+                  break;
+                case 4:
+                  this.keyLogger({ key: "q" });
+                  break;
+                case 5:
+                  this.keyLogger({ key: "w" });
+                  break;
+                case 6:
+                  this.keyLogger({ key: "e" });
+                  break;
+                case 7:
+                  this.keyLogger({ key: "r" });
+                  break;
+                default:
+                  console.log('');
+              }
+              this.setState({whichBtnPress: ""})
+            }
+          }
+        )
+        this.setState({anyBtnPress: false});
+      } else {
+        this.setState({whichBtnPress: ""});
+      };
 
     } else {
       this.setState((prevState) => ({
