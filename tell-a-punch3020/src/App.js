@@ -17,8 +17,8 @@ export default class App extends React.Component {
       },
       whichBtnPress: "",
       anyBtnPress: false,
-      turn: "",
-      phase: "",
+      turn: "P1",
+      phase: "firstTransition",
     };
   }
 
@@ -31,8 +31,6 @@ export default class App extends React.Component {
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
-
-  //if turn is "" or P2, setState turn: P1
 
   keyLogger = (event) => {
     console.log(event.key);
@@ -88,41 +86,40 @@ export default class App extends React.Component {
     } else if (p2Keys[input]) {
       p2ComboInsert(p2Keys[input]);
     }
-
   };
   //end of keyLogger
 
-    //the following serves two purposes: filtering out unwanted keyboard inputs and handling
-    //the insertion logic for comboArrays
-    // Player 1
-    //   if (
-    //     p1Keys[event.key] &&
-    //     this.state.comboArray1.length !== this.state.maxLength
-    //   ) {
-    //     this.setState({
-    //       comboArray1: [...this.state.comboArray1, p1Keys[event.key]],
-    //     });
-    //   } else if (
-    //     p1Keys[event.key] &&
-    //     this.state.comboArray1.length === this.state.maxLength
-    //   ) {
-    //     this.setState({ comboArray1: [] });
-    //   }
+  //the following serves two purposes: filtering out unwanted keyboard inputs and handling
+  //the insertion logic for comboArrays
+  // Player 1
+  //   if (
+  //     p1Keys[event.key] &&
+  //     this.state.comboArray1.length !== this.state.maxLength
+  //   ) {
+  //     this.setState({
+  //       comboArray1: [...this.state.comboArray1, p1Keys[event.key]],
+  //     });
+  //   } else if (
+  //     p1Keys[event.key] &&
+  //     this.state.comboArray1.length === this.state.maxLength
+  //   ) {
+  //     this.setState({ comboArray1: [] });
+  //   }
 
-    //   //Player 2
-    //   if (
-    //     p2Keys[event.key] &&
-    //     this.state.comboArray2.length !== this.state.maxLength
-    //   ) {
-    //     this.setState({
-    //       comboArray2: [...this.state.comboArray2, p2Keys[event.key]],
-    //     });
-    //   } else if (
-    //     p2Keys[event.key] &&
-    //     this.state.comboArray2.length === this.state.maxLength
-    //   ) {
-    //     this.setState({ comboArray2: [] });
-    //   }
+  //   //Player 2
+  //   if (
+  //     p2Keys[event.key] &&
+  //     this.state.comboArray2.length !== this.state.maxLength
+  //   ) {
+  //     this.setState({
+  //       comboArray2: [...this.state.comboArray2, p2Keys[event.key]],
+  //     });
+  //   } else if (
+  //     p2Keys[event.key] &&
+  //     this.state.comboArray2.length === this.state.maxLength
+  //   ) {
+  //     this.setState({ comboArray2: [] });
+  //   }
   // };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
@@ -148,14 +145,23 @@ export default class App extends React.Component {
 
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
-  // press button -> anyBtnPress turns true and triggers
-  // if btn pressed, check to see if it is already in state, if not, send it thru switch to keyLog/state
+  //turn/phase logic
+  //
+  turnsAndPhases = () => {
+    const phases = ["firstTransition", "attack", "atkTransition", "defense", "result"];
+    const turns = { "P1": "P2", "P2": "P1" };
+    if (this.state) {
+    }
+  };
+
   update = () => {
     const gamepads = navigator.getGamepads();
 
+    //setting controllers to state and "listening" for their inputs
     if (gamepads[0]) {
       this.setState({ gamePad: gamepads[0] });
 
+      //press button -> anyBtnPress turns true and triggers conditions below
       this.state.gamePad.buttons.forEach((button) => {
         if (button.pressed && button.value === 1.0) {
           this.setState({ anyBtnPress: true });
@@ -167,7 +173,7 @@ export default class App extends React.Component {
           if (
             button.pressed &&
             button.value === 1.0 &&
-            this.state.whichBtnPress === ""
+            this.state.whichBtnPress !== button
           ) {
             this.setState({ whichBtnPress: button });
             switch (this.state.gamePad.buttons.indexOf(button)) {
