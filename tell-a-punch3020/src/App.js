@@ -23,7 +23,16 @@ export default class App extends React.Component {
   }
 
   //turn: P1, P2
-  //phases: cntDwn(no inputs), atk(Px inputs only), cntDwn(no inputs), def(Py inputs, display Px pattern)
+  //phases: transition(no inputs), atk(Px inputs only), transition(no inputs), def(Py inputs, display Px pattern), results
+
+  //hit page and loop starts: turn P1/ phase transition - P1 input trigger. Then atk - full combo trigger. transition -
+  //P2 input trigger. def - full combo trigger. results - P2 button press trigger. turn P2/ ->
+
+  //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
+  //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
+  //keyLogger -> handles keyboard and controller input, handles comboArr insertion
+
+  //if turn is "" or P2, setState turn: P1
 
   keyLogger = (event) => {
     console.log(event.key);
@@ -80,6 +89,9 @@ export default class App extends React.Component {
       p2ComboInsert(p2Keys[input]);
     }
 
+  };
+  //end of keyLogger
+
     //the following serves two purposes: filtering out unwanted keyboard inputs and handling
     //the insertion logic for comboArrays
     // Player 1
@@ -111,7 +123,7 @@ export default class App extends React.Component {
     //   ) {
     //     this.setState({ comboArray2: [] });
     //   }
-  };
+  // };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
     console.log(
