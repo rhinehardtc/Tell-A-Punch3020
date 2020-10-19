@@ -8,7 +8,6 @@ export default class App extends React.Component {
     super();
     this.state = {
       maxLength: 5,
-      round: 1,
       comboArray1: [],
       comboArray2: [],
       gamePad: {
@@ -18,7 +17,9 @@ export default class App extends React.Component {
       whichBtnPress: "",
       anyBtnPress: false,
       turn: "P1",
-      phase: "firstTransition",
+      phase: "atkTransition",
+      p1Input: true,
+      p2Input: true,
     };
   }
 
@@ -32,9 +33,18 @@ export default class App extends React.Component {
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
 
+  //p1 gets to input on: p1 - atkTrans, atk, results. p2 - defTrans, def, results
+  //p2 gets to input on: p1 - defTrans, def, results. p2 - atkTrans, atk, results
+  //if p1 - atk
+
   keyLogger = (event) => {
+    let { turn, phase, p1Input, p2Input } = this.state;
+    const phases = ["atkTransition", "atk", "defTransition", "def", "result"];
+    const turns = { P1: "P2", P2: "P1" };
+
     console.log(event.key);
     let input = event.key;
+
     const p1Keys = {
       1: "A",
       2: "B",
@@ -66,6 +76,12 @@ export default class App extends React.Component {
         });
       } else {
         this.setState({ comboArray1: [] });
+        this.setState({ comboArray2: [] });
+        if (phase === phases[1]) {
+          this.setState({ phase: phases[2] });
+        } else {
+          this.setState({ phase: phases[4] });
+        }
       }
     };
 
@@ -77,14 +93,46 @@ export default class App extends React.Component {
         });
       } else {
         this.setState({ comboArray2: [] });
+        if (phase === phases[1]) {
+          this.setState({ phase: phases[2] });
+        } else {
+          this.setState({ phase: phases[4] });
+        }
       }
     };
 
     //take input, filter out unwanted keys, and transform into game output
-    if (p1Keys[input]) {
-      p1ComboInsert(p1Keys[input]);
-    } else if (p2Keys[input]) {
-      p2ComboInsert(p2Keys[input]);
+    if (p1Keys[input] && p1Input) {
+      if (phase === phases[1] || phase === phases[3]) {
+        p1ComboInsert(p1Keys[input]);
+      } else {
+        if (phase === phases[0]) {
+          this.setState({ phase: phases[1] });
+        } else if (phase === phases[2]) {
+          this.setState({ phase: phases[3] });
+        } else {
+          this.setState({
+            turn: turns[turn],
+            phase: phases[0],
+          });
+        }
+      }
+    } else if (p2Keys[input] && p2Input) {
+      if (phase === phases[1] || phase === phases[3]) {
+        p2ComboInsert(p2Keys[input]);
+      } else {
+        if (phase === phases[0]) {
+          this.setState({ phase: phases[1] });
+        } else if (phase === phases[2]) {
+          this.setState({ phase: phases[3] });
+        } else {
+          this.setState({
+            turn: turns[turn],
+            phase: phases[0],
+          });
+        }
+      }
+
     }
   };
   //end of keyLogger
@@ -144,15 +192,6 @@ export default class App extends React.Component {
   );
 
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
-
-  //turn/phase logic
-  //
-  turnsAndPhases = () => {
-    const phases = ["firstTransition", "attack", "atkTransition", "defense", "result"];
-    const turns = { "P1": "P2", "P2": "P1" };
-    if (this.state) {
-    }
-  };
 
   update = () => {
     const gamepads = navigator.getGamepads();

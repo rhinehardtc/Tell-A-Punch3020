@@ -1,13 +1,13 @@
-import React from "react"
+import React from "react";
 
-export default function TurnDisplay(props){
-    let { turn, phase } = props
+export default function TurnDisplay(props) {
+  let { turn, phase } = props;
 
-    //if turn "" or P2
-
-    return(
-        <>
-        
-        </>
-    )
+  return(
+      <>
+        {turn}
+        <br></br>
+        {phase}
+    </>
+  )
 }
