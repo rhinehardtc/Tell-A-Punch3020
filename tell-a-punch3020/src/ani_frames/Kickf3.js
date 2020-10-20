@@ -71,7 +71,7 @@ export default function Kickf3() {
 
 `;
 
-const kickf2 = `                                                  
+    const kickf2 = `                                                  
                                                                                                                                                                                                         
                                                                                                                                                                                                         
                                                                                                                                                                                                         
