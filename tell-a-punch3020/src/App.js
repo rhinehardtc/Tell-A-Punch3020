@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import Kickf3 from "./ani_frames/Kickf3.js"
 import ComboConsole from "./ComboConsole";
 
 export default class App extends React.Component {
@@ -191,6 +192,7 @@ export default class App extends React.Component {
           </ol>
         </div>
         <header className="App-header">
+          <Kickf3 />
           <ComboConsole combo={this.state.comboArray1} p1={true} />
           <ComboConsole combo={this.state.comboArray2} p2={true} />
         </header>
