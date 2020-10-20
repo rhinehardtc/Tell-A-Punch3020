@@ -93,3 +93,9 @@ code {
 .p2_button_list ol {
   padding-inline-end: 20px;
 }
+
+.p1_frame {
+  font-size: 16%;
+  color: rgb(255, 0, 0);
+  text-shadow: 0 0 10px rgb(255, 80, 80);
+}
