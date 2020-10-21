@@ -1,7 +1,8 @@
 import React from "react";
 import "./App.css";
-import Kickf3 from "./ani_frames/Kickf3.js"
+import Kickf3 from "./ani_frames/Kickf3";
 import ComboConsole from "./ComboConsole";
+import HPBar from "./HPBar"
 import TurnDisplay from "./TurnDisplay";
 
 export default class App extends React.Component {
@@ -20,7 +21,9 @@ export default class App extends React.Component {
       turn: "P1",
       phase: "atkTransition",
       p1Input: true,
+      p1HP: 10,
       p2Input: true,
+      p2HP: 7,
     };
   }
 
@@ -342,10 +345,16 @@ export default class App extends React.Component {
           </ol>
         </div>
 
+        <div className="health_bars_div">
+          <HPBar HP={this.state.p1HP} p1={true} />
+          <HPBar HP={this.state.p2HP} p2={true} />
+        </div>
+
         <header className="App-header">
           <Kickf3 />
           <ComboConsole combo={this.state.comboArray1} p1={true} />
           <ComboConsole combo={this.state.comboArray2} p2={true} />
+          <Kickf3 />
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>

@@ -17,6 +17,44 @@ code {
   display: none
 }
 
+.health_bars_div {
+  display: flex;
+  flex-flow: row;
+  height: 2.5em;
+  justify-content: space-between;
+}
+
+.hitpoint {
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0 8px rgb(255, 255, 255);
+  
+  width: 10%;
+
+  font-size: 100%;
+}
+
+.p1_health_bar {
+  display: flex;
+  float: left;
+
+  width: 15em;
+
+  border: 2px ridge red;
+  box-shadow: 0 0 8px rgb(255, 80, 80);
+  background-color: rgba(255, 0, 0, 0.11);
+}
+
+.p2_health_bar {
+  display: flex;
+  float: right;
+
+  width: 15em;
+
+  border: 2px ridge rgb(61, 97, 255);
+  box-shadow: 0 0 10px rgb(61, 97, 255);
+  background-color: rgba(0, 0, 255, 0.089);
+}
+
 .p1_input_box {
   display: flex;
   flex-direction: row;

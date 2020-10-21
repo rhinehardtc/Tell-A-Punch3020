@@ -147,9 +147,6 @@ const kickf2 = `
             <pre className="p1_frame">
                 <code>{kickf1}</code>
             </pre>
-            <pre className="p1_frame">
-                <code>{kickf2}</code>
-            </pre>
         </>
     )
 }
