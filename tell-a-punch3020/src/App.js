@@ -23,7 +23,7 @@ export default class App extends React.Component {
       p1Input: true,
       p1HP: 10,
       p2Input: true,
-      p2HP: 7,
+      p2HP: 10,
     };
   }
 
