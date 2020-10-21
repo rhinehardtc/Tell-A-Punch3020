@@ -365,10 +365,12 @@ export default class App extends React.Component {
 
         <header className="App-header">
           <TimeBar time={this.state.p1Time} p1={true}/>
-          <Frames p1={true} />
-          <ComboConsole combo={this.state.comboArray1} p1={true} />
-          <ComboConsole combo={this.state.comboArray2} p2={true} />
-          <Frames p2={true} />
+          <div className="fight_div">
+            <Frames p1={true} />
+            <ComboConsole combo={this.state.comboArray1} p1={true} />
+            <ComboConsole combo={this.state.comboArray2} p2={true} />
+            <Frames p2={true} />
+          </div>
           <TimeBar time={this.state.p2Time} p2={true}/>
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
