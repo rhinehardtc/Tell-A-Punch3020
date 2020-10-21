@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Kickf3 from "./ani_frames/Kickf3";
+import Frames from "./ani_frames/Frames";
 import ComboConsole from "./ComboConsole";
 import HPBar from "./HPBar"
 import TurnDisplay from "./TurnDisplay";
@@ -351,10 +351,10 @@ export default class App extends React.Component {
         </div>
 
         <header className="App-header">
-          <Kickf3 />
+          <Frames p1={true} />
           <ComboConsole combo={this.state.comboArray1} p1={true} />
           <ComboConsole combo={this.state.comboArray2} p2={true} />
-          <Kickf3 />
+          <Frames p2={true} />
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>
