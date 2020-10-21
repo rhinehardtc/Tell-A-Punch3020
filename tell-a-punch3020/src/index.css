@@ -136,3 +136,9 @@ code {
   color: rgb(255, 0, 0);
   text-shadow: 0 0 10px rgb(255, 80, 80);
 }
+
+.p2_frame {
+  font-size: 16%;
+  color: rgb(86, 117, 255);
+  text-shadow: 0 0 10px rgb(84, 116, 255);
+}
