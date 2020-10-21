@@ -2,7 +2,8 @@ import React from "react";
 import "./App.css";
 import Frames from "./ani_frames/Frames";
 import ComboConsole from "./ComboConsole";
-import HPBar from "./HPBar"
+import HPBar from "./HPBar";
+import TimeBar from "./TimeBar";
 import TurnDisplay from "./TurnDisplay";
 
 export default class App extends React.Component {
@@ -22,8 +23,10 @@ export default class App extends React.Component {
       phase: "atkTransition",
       p1Input: true,
       p1HP: 10,
+      p1Time: 300,
       p2Input: true,
       p2HP: 10,
+      p2Time: 300,
     };
   }
 
@@ -301,15 +304,25 @@ export default class App extends React.Component {
       }));
     }
 
+    this.timeKiller()
+
     window.requestAnimationFrame(this.update);
   };
+
+  timeKiller = () => {
+    if(this.state.turn === "P1"){
+      if(this.state.p1Time > 0) this.setState({p1Time: this.state.p1Time - 1})
+    } else {
+      if(this.state.p2Time > 0) this.setState({p2Time: this.state.p2Time - 1})
+    }
+  }
 
   runUpdate = window.requestAnimationFrame(this.update);
 
   render() {
     return (
       <div className="App">
-        <div className="p1_button_list">
+        {/* <div className="p1_button_list">
           <ol>
             {this.state.gamePad.buttons ? (
               this.state.gamePad.buttons.map((button) => (
@@ -321,7 +334,7 @@ export default class App extends React.Component {
               <li>"no gamepad, no buttons"</li>
             )}
           </ol>
-        </div>
+        </div> */}
 
         <div className="turn_display">
           <link
@@ -331,7 +344,7 @@ export default class App extends React.Component {
           <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
         </div>
 
-        <div className="p2_button_list">
+        {/* <div className="p2_button_list">
           <ol>
             {this.state.gamePad.buttons ? (
               this.state.gamePad.buttons.map((button) => (
@@ -343,7 +356,7 @@ export default class App extends React.Component {
               <li>"no gamepad, no buttons"</li>
             )}
           </ol>
-        </div>
+        </div> */}
 
         <div className="health_bars_div">
           <HPBar HP={this.state.p1HP} p1={true} />
@@ -351,10 +364,12 @@ export default class App extends React.Component {
         </div>
 
         <header className="App-header">
+          <TimeBar time={this.state.p1Time} p1={true}/>
           <Frames p1={true} />
           <ComboConsole combo={this.state.comboArray1} p1={true} />
           <ComboConsole combo={this.state.comboArray2} p2={true} />
           <Frames p2={true} />
+          <TimeBar time={this.state.p2Time} p2={true}/>
         </header>
         <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
       </div>

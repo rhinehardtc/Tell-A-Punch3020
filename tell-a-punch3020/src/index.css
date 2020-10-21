@@ -28,7 +28,15 @@ code {
   width: 10%;
 }
 
+.timepoint {
+  height: 0.75px;
+}
+
 .filled_hitpoint {
+  background-color: rgba(255, 255, 255, 0.473);
+}
+
+.filled_timepoint {
   background-color: rgba(255, 255, 255, 0.473);
 }
 
@@ -43,11 +51,35 @@ code {
   background-color: rgba(255, 0, 0, 0.397);
 }
 
+.p1_time_bar {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  
+  width: 2%;
+
+  border: 2px ridge red;
+  box-shadow: 0 0 8px rgb(255, 80, 80);
+  background-color: rgba(255, 0, 0, 0.397);
+}
+
 .p2_health_bar {
   display: flex;
   float: right;
 
   width: 15em;
+
+  border: 2px ridge rgb(61, 97, 255);
+  box-shadow: 0 0 10px rgb(61, 97, 255);
+  background-color: rgba(0, 0, 255, 0.384);
+}
+
+.p2_time_bar {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  
+  width: 2%;
 
   border: 2px ridge rgb(61, 97, 255);
   box-shadow: 0 0 10px rgb(61, 97, 255);
