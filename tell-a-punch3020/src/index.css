@@ -17,18 +17,45 @@ code {
   display: none
 }
 
+.fight_div {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
 .health_bars_div {
   display: flex;
   flex-flow: row;
+  position: sticky;
+
+  padding-left: 15%;
+  padding-right: 15%;
+
   height: 2.5em;
   justify-content: space-between;
+  z-index: 0;
 }
 
 .hitpoint {
   width: 10%;
+  border: 1px solid white;
+}
+
+.timepoint {
+  height: 0.75px;
 }
 
 .filled_hitpoint {
+  background-color: rgba(255, 255, 255, 0.473);
+}
+
+.filled_timepoint {
   background-color: rgba(255, 255, 255, 0.473);
 }
 
@@ -37,6 +64,20 @@ code {
   float: left;
 
   width: 15em;
+
+  border: 2px ridge red;
+  box-shadow: 0 0 8px rgb(255, 80, 80);
+  background-color: rgba(255, 0, 0, 0.397);
+}
+
+.p1_time_bar {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  
+  width: 2%;
+  border-radius: 5px;
+  overflow-x: hidden;
 
   border: 2px ridge red;
   box-shadow: 0 0 8px rgb(255, 80, 80);
@@ -54,15 +95,31 @@ code {
   background-color: rgba(0, 0, 255, 0.384);
 }
 
+.p2_time_bar {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  
+  width: 2%;
+  border-radius: 5px;
+  overflow-x: hidden;
+
+  border: 2px ridge rgb(61, 97, 255);
+  box-shadow: 0 0 10px rgb(61, 97, 255);
+  background-color: rgba(0, 0, 255, 0.384);
+}
+
 .p1_input_box {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border: 5px ridge red;
+  border-radius: 5px;
+
   box-shadow: 0 0 8px rgb(255, 80, 80);
   color: red;
   background-color: rgba(255, 0, 0, 0.11);
@@ -79,9 +136,11 @@ code {
   align-items: center;
   justify-content: center;
 
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border: 5px ridge rgb(61, 97, 255);
+  border-radius: 5px;
+  
   box-shadow: 0 0 10px rgb(61, 97, 255);
   color: rgb(61, 97, 255);
   background-color: rgba(0, 0, 255, 0.089);
@@ -132,13 +191,13 @@ code {
 }
 
 .p1_frame {
-  font-size: 16%;
+  font-size: 14%;
   color: rgb(255, 0, 0);
   text-shadow: 0 0 10px rgb(255, 80, 80);
 }
 
 .p2_frame {
-  font-size: 16%;
+  font-size: 14%;
   color: rgb(86, 117, 255);
   text-shadow: 0 0 10px rgb(84, 116, 255);
 }
