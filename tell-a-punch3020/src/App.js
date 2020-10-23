@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import TitleScreen from "./TitleScreen"
 import Frames from "./ani_frames/Frames";
 import ComboConsole from "./ComboConsole";
 import HPBar from "./HPBar";
@@ -10,6 +11,7 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      started: false,
       maxLength: 5,
       comboArray1: [],
       comboArray2: [],
@@ -28,6 +30,77 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 300,
     };
+  }
+
+  startGame = () => {
+    this.setState({started: true})
+  }
+
+  decideIfStarted = () => {
+    if(this.state.started){
+      return (
+        <>
+        {/* <div className="p1_button_list">
+          <ol>
+            {this.state.gamePad.buttons ? (
+              this.state.gamePad.buttons.map((button) => (
+                <li key={this.state.gamePad.buttons.indexOf(button)}>
+                  {String(button.pressed)}
+                </li>
+              ))
+            ) : (
+              <li>"no gamepad, no buttons"</li>
+            )}
+          </ol>
+        </div> */}
+
+        <div className="turn_display">
+          <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+          ></link>
+          <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
+        </div>
+
+        {/* <div className="p2_button_list">
+          <ol>
+            {this.state.gamePad.buttons ? (
+              this.state.gamePad.buttons.map((button) => (
+                <li key={this.state.gamePad.buttons.indexOf(button)}>
+                  {String(button.pressed)}
+                </li>
+              ))
+            ) : (
+              <li>"no gamepad, no buttons"</li>
+            )}
+          </ol>
+        </div> */}
+
+        <div className="health_bars_div">
+          <HPBar HP={this.state.p1HP} p1={true} />
+          <HPBar HP={this.state.p2HP} p2={true} />
+        </div>
+
+        <header className="App-header">
+          <TimeBar time={this.state.p1Time} p1={true}/>
+          <div className="fight_div">
+            <Frames p1={true} />
+            <ComboConsole combo={this.state.comboArray1} p1={true} />
+            <ComboConsole combo={this.state.comboArray2} p2={true} />
+            <Frames p2={true} />
+          </div>
+          <TimeBar time={this.state.p2Time} p2={true}/>
+        </header>
+        <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
+        </>
+      )
+    } else {
+      return (
+        <>
+        <TitleScreen startGame={this.startGame}/>
+        </>
+      )
+    }
   }
 
   phases = ["atkTransition", "atk", "defTransition", "def", "result"];
@@ -310,10 +383,12 @@ export default class App extends React.Component {
   };
 
   timeKiller = () => {
-    if(this.state.turn === "P1"){
-      if(this.state.p1Time > 0) this.setState({p1Time: this.state.p1Time - 1})
-    } else {
-      if(this.state.p2Time > 0) this.setState({p2Time: this.state.p2Time - 1})
+    if(this.state.started){
+      if(this.state.turn === "P1"){
+        if(this.state.p1Time > 0) this.setState({p1Time: this.state.p1Time - 1})
+      } else {
+        if(this.state.p2Time > 0) this.setState({p2Time: this.state.p2Time - 1})
+      }
     }
   }
 
@@ -322,58 +397,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {/* <div className="p1_button_list">
-          <ol>
-            {this.state.gamePad.buttons ? (
-              this.state.gamePad.buttons.map((button) => (
-                <li key={this.state.gamePad.buttons.indexOf(button)}>
-                  {String(button.pressed)}
-                </li>
-              ))
-            ) : (
-              <li>"no gamepad, no buttons"</li>
-            )}
-          </ol>
-        </div> */}
-
-        <div className="turn_display">
-          <link
-            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-            rel="stylesheet"
-          ></link>
-          <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
-        </div>
-
-        {/* <div className="p2_button_list">
-          <ol>
-            {this.state.gamePad.buttons ? (
-              this.state.gamePad.buttons.map((button) => (
-                <li key={this.state.gamePad.buttons.indexOf(button)}>
-                  {String(button.pressed)}
-                </li>
-              ))
-            ) : (
-              <li>"no gamepad, no buttons"</li>
-            )}
-          </ol>
-        </div> */}
-
-        <div className="health_bars_div">
-          <HPBar HP={this.state.p1HP} p1={true} />
-          <HPBar HP={this.state.p2HP} p2={true} />
-        </div>
-
-        <header className="App-header">
-          <TimeBar time={this.state.p1Time} p1={true}/>
-          <div className="fight_div">
-            <Frames p1={true} />
-            <ComboConsole combo={this.state.comboArray1} p1={true} />
-            <ComboConsole combo={this.state.comboArray2} p2={true} />
-            <Frames p2={true} />
-          </div>
-          <TimeBar time={this.state.p2Time} p2={true}/>
-        </header>
-        <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
+        {this.decideIfStarted()}
       </div>
     );
   }
