@@ -164,7 +164,7 @@ export default class App extends React.Component {
   keyPress = window.addEventListener("keydown", (e) => this.keyLogger(e));
 
   update = () => {
-    let { turn, phase } = this.state;
+    let { turn, phase, p1Input, p2Input } = this.state;
     const gamepads = navigator.getGamepads();
 
     //Input toggles based on phase/turn order
@@ -208,17 +208,25 @@ export default class App extends React.Component {
     }
 
     //setting controllers to state and "listening" for their inputs
+    // Player 1
     if (gamepads[0]) {
-      this.setState({ gamePads: { p1: gamepads[0] } });
+      this.setState((prevState) => {
+        return {
+          gamePads: {
+            p1: gamepads[0],
+            p2: { ...prevState.gamePads.p2 },
+          },
+        };
+      });
 
       //press button -> anyBtnPress turns true and triggers conditions below
       this.state.gamePads.p1.buttons.forEach((button) => {
-        if (button.pressed && button.value === 1.0) {
+        if (button.pressed && button.value === 1.0 && p1Input) {
           this.setState({ anyBtnPress: true });
         }
       });
 
-      if (this.state.anyBtnPress) {
+      if (this.state.anyBtnPress && p1Input) {
         this.state.gamePads.p1.buttons.forEach((button) => {
           if (
             button.pressed &&
@@ -238,12 +246,9 @@ export default class App extends React.Component {
               7: { key: "r" },
             };
 
-            console.log(button);
-
             this.keyLogger(
               p1Translate[this.state.gamePads.p1.buttons.indexOf(button)]
             );
-
             this.setState({ whichBtnPress: "" });
           }
         });
@@ -256,6 +261,68 @@ export default class App extends React.Component {
         gamePads: {
           p1: { id: "no P1 gamepad connected" },
           p2: { ...prevState.gamePads.p2 },
+        },
+      }));
+    }
+
+    // poll gamepads, set state, map buttons and press to raise flag(anyBtnPress).
+    // if flag, map buttons and set pressed one to state, translate and send to keyLogger
+    // keyLogger will handle toggling controller inputs on/off based on turn cycle
+
+    // Player 2
+    if (gamepads[1]) {
+      this.setState((prevState) => {
+        return {
+          gamePads: {
+            p1: { ...prevState.gamePads.p1 },
+            p2: gamepads[1],
+          },
+        };
+      });
+
+      //press button -> anyBtnPress turns true and triggers conditions below
+      this.state.gamePads.p2.buttons.forEach((button) => {
+        if (button.pressed && button.value === 1.0 && p2Input) {
+          this.setState({ anyBtnPress: true });
+        }
+      });
+
+      if (this.state.anyBtnPress && p2Input) {
+        this.state.gamePads.p2.buttons.forEach((button) => {
+          if (
+            button.pressed &&
+            button.value === 1.0 &&
+            this.state.whichBtnPress !== button
+          ) {
+            this.setState({ whichBtnPress: button });
+
+            const p2Translate = {
+              0: { key: "7" },
+              1: { key: "8" },
+              2: { key: "9" },
+              3: { key: "0" },
+              4: { key: "u" },
+              5: { key: "i" },
+              6: { key: "o" },
+              7: { key: "p" },
+            };
+
+            this.keyLogger(
+              p2Translate[this.state.gamePads.p2.buttons.indexOf(button)]
+            );
+
+            this.setState({ whichBtnPress: "" });
+          }
+        });
+        this.setState({ anyBtnPress: false });
+      } else {
+        this.setState({ whichBtnPress: "" });
+      }
+    } else {
+      this.setState((prevState) => ({
+        gamePads: {
+          p1: { ...prevState.gamePads.p1 },
+          p2: { id: "no P2 gamepad connected" },
         },
       }));
     }
@@ -331,7 +398,7 @@ export default class App extends React.Component {
           </div>
           <TimeBar time={this.state.p2Time} p2={true} />
         </header>
-        <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
+        <h4 className="gamepad_display">{this.state.gamePads.p2.id}</h4>
       </div>
     );
   }
