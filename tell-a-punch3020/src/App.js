@@ -13,9 +13,16 @@ export default class App extends React.Component {
       maxLength: 5,
       comboArray1: [],
       comboArray2: [],
-      gamePad: {
-        id: "no gamepad connected",
-        buttons: [{ pressed: "no gamepad, no buttons" }],
+      // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
+      gamePads: {
+        p1: {
+          id: "no gamepad connected",
+          buttons: [{ pressed: "no gamepad, no buttons" }],
+        },
+        p2: {
+          id: "no gamepad connected",
+          buttons: [{ pressed: "no gamepad, no buttons" }],
+        },
       },
       whichBtnPress: "",
       anyBtnPress: false,
@@ -33,24 +40,14 @@ export default class App extends React.Component {
   phases = ["atkTransition", "atk", "defTransition", "def", "result"];
   turns = { P1: "P2", P2: "P1" };
 
-  //turn: P1, P2
-  //phases: transition(no inputs), atk(Px inputs only), transition(no inputs), def(Py inputs, display Px pattern), results
-
-  //hit page and loop starts: turn P1/ phase transition - P1 input trigger. Then atk - full combo trigger. transition -
-  //P2 input trigger. def - full combo trigger. results - P2 button press trigger. turn P2/ ->
-
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
 
-  //p1 gets to input on: p1 - atkTrans, atk, results. p2 - defTrans, def, results
-  //p2 gets to input on: p1 - defTrans, def, results. p2 - atkTrans, atk, results
-  //if p1 - atk
-
   keyLogger = (event) => {
     let { turn, phase, p1Input, p2Input } = this.state;
 
-    console.log(event.key);
+    console.log(event);
     let input = event.key;
 
     const p1Keys = {
@@ -142,40 +139,6 @@ export default class App extends React.Component {
       }
     }
   };
-  //end of keyLogger
-
-  //the following serves two purposes: filtering out unwanted keyboard inputs and handling
-  //the insertion logic for comboArrays
-  // Player 1
-  //   if (
-  //     p1Keys[event.key] &&
-  //     this.state.comboArray1.length !== this.state.maxLength
-  //   ) {
-  //     this.setState({
-  //       comboArray1: [...this.state.comboArray1, p1Keys[event.key]],
-  //     });
-  //   } else if (
-  //     p1Keys[event.key] &&
-  //     this.state.comboArray1.length === this.state.maxLength
-  //   ) {
-  //     this.setState({ comboArray1: [] });
-  //   }
-
-  //   //Player 2
-  //   if (
-  //     p2Keys[event.key] &&
-  //     this.state.comboArray2.length !== this.state.maxLength
-  //   ) {
-  //     this.setState({
-  //       comboArray2: [...this.state.comboArray2, p2Keys[event.key]],
-  //     });
-  //   } else if (
-  //     p2Keys[event.key] &&
-  //     this.state.comboArray2.length === this.state.maxLength
-  //   ) {
-  //     this.setState({ comboArray2: [] });
-  //   }
-  // };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
     console.log(
@@ -246,51 +209,41 @@ export default class App extends React.Component {
 
     //setting controllers to state and "listening" for their inputs
     if (gamepads[0]) {
-      this.setState({ gamePad: gamepads[0] });
+      this.setState({ gamePads: { p1: gamepads[0] } });
 
       //press button -> anyBtnPress turns true and triggers conditions below
-      this.state.gamePad.buttons.forEach((button) => {
+      this.state.gamePads.p1.buttons.forEach((button) => {
         if (button.pressed && button.value === 1.0) {
           this.setState({ anyBtnPress: true });
         }
       });
 
       if (this.state.anyBtnPress) {
-        this.state.gamePad.buttons.forEach((button) => {
+        this.state.gamePads.p1.buttons.forEach((button) => {
           if (
             button.pressed &&
             button.value === 1.0 &&
             this.state.whichBtnPress !== button
           ) {
             this.setState({ whichBtnPress: button });
-            switch (this.state.gamePad.buttons.indexOf(button)) {
-              case 0:
-                this.keyLogger({ key: "1" });
-                break;
-              case 1:
-                this.keyLogger({ key: "2" });
-                break;
-              case 2:
-                this.keyLogger({ key: "3" });
-                break;
-              case 3:
-                this.keyLogger({ key: "4" });
-                break;
-              case 4:
-                this.keyLogger({ key: "q" });
-                break;
-              case 5:
-                this.keyLogger({ key: "w" });
-                break;
-              case 6:
-                this.keyLogger({ key: "e" });
-                break;
-              case 7:
-                this.keyLogger({ key: "r" });
-                break;
-              default:
-                console.log("");
-            }
+
+            const p1Translate = {
+              0: { key: "1" },
+              1: { key: "2" },
+              2: { key: "3" },
+              3: { key: "4" },
+              4: { key: "q" },
+              5: { key: "w" },
+              6: { key: "e" },
+              7: { key: "r" },
+            };
+
+            console.log(button);
+
+            this.keyLogger(
+              p1Translate[this.state.gamePads.p1.buttons.indexOf(button)]
+            );
+
             this.setState({ whichBtnPress: "" });
           }
         });
@@ -300,22 +253,27 @@ export default class App extends React.Component {
       }
     } else {
       this.setState((prevState) => ({
-        gamePad: { ...prevState.gamePad, id: "no P1 gamepad connected" },
+        gamePads: {
+          p1: { id: "no P1 gamepad connected" },
+          p2: { ...prevState.gamePads.p2 },
+        },
       }));
     }
 
-    this.timeKiller()
+    this.timeKiller();
 
     window.requestAnimationFrame(this.update);
   };
 
   timeKiller = () => {
-    if(this.state.turn === "P1"){
-      if(this.state.p1Time > 0) this.setState({p1Time: this.state.p1Time - 1})
+    if (this.state.turn === "P1") {
+      if (this.state.p1Time > 0)
+        this.setState({ p1Time: this.state.p1Time - 1 });
     } else {
-      if(this.state.p2Time > 0) this.setState({p2Time: this.state.p2Time - 1})
+      if (this.state.p2Time > 0)
+        this.setState({ p2Time: this.state.p2Time - 1 });
     }
-  }
+  };
 
   runUpdate = window.requestAnimationFrame(this.update);
 
@@ -364,16 +322,16 @@ export default class App extends React.Component {
         </div>
 
         <header className="App-header">
-          <TimeBar time={this.state.p1Time} p1={true}/>
+          <TimeBar time={this.state.p1Time} p1={true} />
           <div className="fight_div">
             <Frames p1={true} />
             <ComboConsole combo={this.state.comboArray1} p1={true} />
             <ComboConsole combo={this.state.comboArray2} p2={true} />
             <Frames p2={true} />
           </div>
-          <TimeBar time={this.state.p2Time} p2={true}/>
+          <TimeBar time={this.state.p2Time} p2={true} />
         </header>
-        <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
+        <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
       </div>
     );
   }
