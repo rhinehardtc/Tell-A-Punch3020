@@ -24,13 +24,13 @@ const TimeBar = (props) => {
         if (props.p1){
             return (
                 <div className="p1_time_bar">
-                    {displayArr.reverse().map((timePoint) => <TimePoint key={Math.random() * 10000} timePoint={timePoint}/>)}
+                    {displayArr.reverse().map((timePoint) => <TimePoint timePoint={timePoint}/>)}
                 </div>
             )
         } else {
             return (
                 <div className="p2_time_bar">
-                    {displayArr.reverse().map((timePoint) => <TimePoint key={Math.random() * 10000} timePoint={timePoint}/>)}
+                    {displayArr.reverse().map((timePoint) => <TimePoint timePoint={timePoint}/>)}
                 </div>
             )
         }
