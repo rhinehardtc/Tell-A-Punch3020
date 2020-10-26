@@ -28,7 +28,7 @@ class TitleScreen extends React.Component {
 
     kd = window.addEventListener("keydown", () => this.props.startGame())
 
-    shouldComponentUpdate(nextProps){
+    shouldComponentUpdate(){
         return false
     }
     
