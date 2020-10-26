@@ -177,9 +177,7 @@ export default class App extends React.Component {
       } else {
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
-        if (phase === this.phases[2]) {
-          this.setState({ phase: this.phases[1] });
-        } else if (phase === this.phases[0]) {
+        if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
@@ -209,6 +207,10 @@ export default class App extends React.Component {
     };
 
     //take input, filter out unwanted keys, and transform into game output
+    if (phase === this.phases[2]) {
+      this.setState({ phase: this.phases[1] });
+    } 
+    
     if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
