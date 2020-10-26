@@ -1,8 +1,12 @@
 import React from 'react';
 
-const TitleScreen = (props) => {
+class TitleScreen extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {}
+    }
 
-    const banner = String.raw`
+    banner = String.raw`
    ____________/\\\\\\\\\\\\\\\________________/\\\\\\_____/\\\\\\__________________________________________/\\\\\\\\\______________                             
     ___________\///////\\\/////________________\////\\\____\////\\\________________________________________/\\\\\\\\\\\\\____________                            
      _________________\/\\\________________________\/\\\_______\/\\\_______________________________________/\\\/////////\\\___________                           
@@ -22,17 +26,22 @@ const TitleScreen = (props) => {
          _\/\\\____________\//\\\\\\\\\__\/\\\___\/\\\__\///\\\\\\\\_\/\\\___\/\\\___________\///\\\\\\\\\/____\///\\\\\\\/____/\\\\\\\\\\\\\\\__\///\\\\\\\/___ 
           _\///______________\/////////___\///____\///_____\////////__\///____\///______________\/////////________\///////_____\///////////////_____\///////_____`;
 
+    kd = window.addEventListener("keydown", () => this.props.startGame())
 
-    window.addEventListener("keydown", () => props.startGame())
+    shouldComponentUpdate(nextProps){
+        return false
+    }
     
-    return (
-        <div className="title_screen">
-            <pre className="title_banner">
-                <code>{banner}</code>
-            </pre>
-            <h3>Press Any Key</h3>
-        </div>
-    )
+    render(){
+        return (
+            <div className="title_screen">
+                <pre className="title_banner">
+                    <code>{this.banner}</code>
+                </pre>
+                <h3>Press Any Key</h3>
+            </div>
+        )
+    }
 }
 
 export default TitleScreen

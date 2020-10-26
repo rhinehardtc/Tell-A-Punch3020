@@ -97,7 +97,7 @@ export default class App extends React.Component {
     } else {
       return (
         <>
-        <TitleScreen startGame={this.startGame}/>
+        <TitleScreen startGame={this.startGame} started={this.state.started}/>
         </>
       )
     }
