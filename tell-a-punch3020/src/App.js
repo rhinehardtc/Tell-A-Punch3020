@@ -55,7 +55,9 @@ export default class App extends React.Component {
       (turn === "P2" && phase === "atk") ||
       (turn === "P1" && phase === "def")
     ) {
-      return <ComboConsole combo={this.state.comboArray3} p2={true} />;
+      return (
+        <ComboConsole combo={this.state.comboArray3} center={true} p2={true} />
+      );
     }
   };
 
