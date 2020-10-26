@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import TitleScreen from "./TitleScreen"
+import TitleScreen from "./TitleScreen";
 import Frames from "./ani_frames/Frames";
 import ComboConsole from "./ComboConsole";
 import HPBar from "./HPBar";
@@ -15,6 +15,7 @@ export default class App extends React.Component {
       maxLength: 5,
       comboArray1: [],
       comboArray2: [],
+      comboArray3: [],
       // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
       gamePads: {
         p1: {
@@ -40,14 +41,31 @@ export default class App extends React.Component {
   }
 
   startGame = () => {
-    this.setState({started: true})
-  }
+    this.setState({ started: true });
+  };
+
+  decideCenterColor = () => {
+    let { turn, phase } = this.state;
+    if (
+      (turn === "P1" && phase === "atk") ||
+      (turn === "P2" && phase === "def")
+    ) {
+      return <ComboConsole combo={this.state.comboArray3} p1={true} />;
+    } else if (
+      (turn === "P2" && phase === "atk") ||
+      (turn === "P1" && phase === "def")
+    ) {
+      return (
+        <ComboConsole combo={this.state.comboArray3} center={true} p2={true} />
+      );
+    }
+  };
 
   decideIfStarted = () => {
-    if(this.state.started){
+    if (this.state.started) {
       return (
         <>
-        {/* <div className="p1_button_list">
+          {/* <div className="p1_button_list">
           <ol>
             {this.state.gamePad.buttons ? (
               this.state.gamePad.buttons.map((button) => (
@@ -61,56 +79,57 @@ export default class App extends React.Component {
           </ol>
         </div> */}
 
-        <div className="turn_display">
-          <link
-            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-            rel="stylesheet"
-          ></link>
-          <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
-        </div>
-
-        {/* <div className="p2_button_list">
-          <ol>
-            {this.state.gamePad.buttons ? (
-              this.state.gamePad.buttons.map((button) => (
-                <li key={this.state.gamePad.buttons.indexOf(button)}>
-                  {String(button.pressed)}
-                </li>
-              ))
-            ) : (
-              <li>"no gamepad, no buttons"</li>
-            )}
-          </ol>
-        </div> */}
-
-        <div className="health_bars_div">
-          <HPBar HP={this.state.p1HP} p1={true} />
-          <HPBar HP={this.state.p2HP} p2={true} />
-        </div>
-
-        <header className="App-header">
-          <TimeBar time={this.state.p1Time} p1={true}/>
-          <div className="fight_div">
-            <Frames p1={true} />
-            <ComboConsole combo={this.state.comboArray1} p1={true} />
-            <ComboConsole combo={this.state.comboArray2} p2={true} />
-            <Frames p2={true} />
+          <div className="turn_display">
+            <link
+              href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+              rel="stylesheet"
+            ></link>
+            <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
           </div>
-          <TimeBar time={this.state.p2Time} p2={true}/>
-        </header>
-        <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
+
+          {/* <div className="p2_button_list">
+          <ol>
+            {this.state.gamePad.buttons ? (
+              this.state.gamePad.buttons.map((button) => (
+                <li key={this.state.gamePad.buttons.indexOf(button)}>
+                  {String(button.pressed)}
+                </li>
+              ))
+            ) : (
+              <li>"no gamepad, no buttons"</li>
+            )}
+          </ol>
+        </div> */}
+
+          <div className="health_bars_div">
+            <HPBar HP={this.state.p1HP} p1={true} />
+            <HPBar HP={this.state.p2HP} p2={true} />
+          </div>
+
+          <header className="App-header">
+            <TimeBar time={this.state.p1Time} p1={true} />
+            <div className="fight_div">
+              <Frames p1={true} />
+              <ComboConsole combo={this.state.comboArray1} p1={true} />
+              {this.decideCenterColor()}
+              <ComboConsole combo={this.state.comboArray2} p2={true} />
+              <Frames p2={true} />
+            </div>
+            <TimeBar time={this.state.p2Time} p2={true} />
+          </header>
+          <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
         </>
-      )
+      );
     } else {
       return (
         <>
-        <TitleScreen startGame={this.startGame}/>
+          <TitleScreen startGame={this.startGame} />
         </>
-      )
+      );
     }
-  }
+  };
 
-  phases = ["def","atk","start"];
+  phases = ["def", "atk", "start"];
   turns = { P1: "P2", P2: "P1" };
 
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
@@ -118,7 +137,7 @@ export default class App extends React.Component {
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
 
   keyLogger = (event) => {
-    let { turn, phase, p1Input, p2Input } = this.state;
+    let { phase, p1Input, p2Input } = this.state;
 
     console.log(event);
     let input = event.key;
@@ -148,16 +167,20 @@ export default class App extends React.Component {
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
     const p1ComboInsert = (k) => {
-      if (this.state.comboArray1.length < this.state.maxLength && phase !== this.phases[2]) {
+      if (
+        this.state.comboArray1.length < this.state.maxLength &&
+        phase !== this.phases[2]
+      ) {
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
       } else {
+        this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
-        this.setState({ comboArray2: [] });
-        if(phase === this.phases[2]){
-          this.setState({ phase: this.phases[1] })
+        if (phase === this.phases[2]) {
+          this.setState({ phase: this.phases[1] });
         } else if (phase === this.phases[0]) {
+          this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
           this.setState({ phase: this.phases[0] });
@@ -173,8 +196,10 @@ export default class App extends React.Component {
           comboArray2: [...this.state.comboArray2, k],
         });
       } else {
+        this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
         if (phase === this.phases[0]) {
+          this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
           this.setState({ phase: this.phases[0] });
@@ -185,9 +210,9 @@ export default class App extends React.Component {
 
     //take input, filter out unwanted keys, and transform into game output
     if (p1Keys[input] && p1Input) {
-        p1ComboInsert(p1Keys[input]);
+      p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
-        p2ComboInsert(p2Keys[input]);
+      p2ComboInsert(p2Keys[input]);
     }
   };
 
@@ -368,12 +393,13 @@ export default class App extends React.Component {
   };
 
   timeKiller = () => {
-
-    if(this.state.started){
-      if(this.state.turn === "P1"){
-        if(this.state.p1Time > 0) this.setState({p1Time: this.state.p1Time - 1})
+    if (this.state.started) {
+      if (this.state.turn === "P1") {
+        if (this.state.p1Time > 0)
+          this.setState({ p1Time: this.state.p1Time - 1 });
       } else {
-        if(this.state.p2Time > 0) this.setState({p2Time: this.state.p2Time - 1})
+        if (this.state.p2Time > 0)
+          this.setState({ p2Time: this.state.p2Time - 1 });
       }
     }
   };
@@ -381,10 +407,6 @@ export default class App extends React.Component {
   runUpdate = window.requestAnimationFrame(this.update);
 
   render() {
-    return (
-      <div className="App">
-        {this.decideIfStarted()}
-      </div>
-    );
+    return <div className="App">{this.decideIfStarted()}</div>;
   }
 }
