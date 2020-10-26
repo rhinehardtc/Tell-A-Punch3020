@@ -98,7 +98,7 @@ export default class App extends React.Component {
           </div>
           <TimeBar time={this.state.p2Time} p2={true}/>
         </header>
-        <h4 className="gamepad_display">{this.state.gamePad.id}</h4>
+        <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
         </>
       )
     } else {
