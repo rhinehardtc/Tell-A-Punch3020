@@ -29,7 +29,7 @@ export default class App extends React.Component {
       whichBtnPress: "",
       anyBtnPress: false,
       turn: "P1",
-      phase: "atkTransition",
+      phase: "start",
       p1Input: true,
       p1HP: 10,
       p1Time: 300,
@@ -110,7 +110,7 @@ export default class App extends React.Component {
     }
   }
 
-  phases = ["atkTransition", "atk", "defTransition", "def", "result"];
+  phases = ["def","atk","start"];
   turns = { P1: "P2", P2: "P1" };
 
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
@@ -148,17 +148,20 @@ export default class App extends React.Component {
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
     const p1ComboInsert = (k) => {
-      if (this.state.comboArray1.length < this.state.maxLength) {
+      if (this.state.comboArray1.length < this.state.maxLength && phase !== this.phases[2]) {
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
       } else {
         this.setState({ comboArray1: [] });
         this.setState({ comboArray2: [] });
-        if (phase === this.phases[1]) {
-          this.setState({ phase: this.phases[2] });
+        if(phase === this.phases[2]){
+          this.setState({ phase: this.phases[1] })
+        } else if (phase === this.phases[0]) {
+          this.setState({ phase: this.phases[1] });
         } else {
-          this.setState({ phase: this.phases[4] });
+          this.setState({ phase: this.phases[0] });
+          this.setState({ turn: "P2" });
         }
       }
     };
@@ -171,45 +174,20 @@ export default class App extends React.Component {
         });
       } else {
         this.setState({ comboArray2: [] });
-        if (phase === this.phases[1]) {
-          this.setState({ phase: this.phases[2] });
+        if (phase === this.phases[0]) {
+          this.setState({ phase: this.phases[1] });
         } else {
-          this.setState({ phase: this.phases[4] });
+          this.setState({ phase: this.phases[0] });
+          this.setState({ turn: "P1" });
         }
       }
     };
 
     //take input, filter out unwanted keys, and transform into game output
     if (p1Keys[input] && p1Input) {
-      if (phase === this.phases[1] || phase === this.phases[3]) {
         p1ComboInsert(p1Keys[input]);
-      } else {
-        if (phase === this.phases[0]) {
-          this.setState({ phase: this.phases[1] });
-        } else if (phase === this.phases[2]) {
-          this.setState({ phase: this.phases[3] });
-        } else {
-          this.setState({
-            turn: this.turns[turn],
-            phase: this.phases[0],
-          });
-        }
-      }
     } else if (p2Keys[input] && p2Input) {
-      if (phase === this.phases[1] || phase === this.phases[3]) {
         p2ComboInsert(p2Keys[input]);
-      } else {
-        if (phase === this.phases[0]) {
-          this.setState({ phase: this.phases[1] });
-        } else if (phase === this.phases[2]) {
-          this.setState({ phase: this.phases[3] });
-        } else {
-          this.setState({
-            turn: this.turns[turn],
-            phase: this.phases[0],
-          });
-        }
-      }
     }
   };
 
@@ -250,28 +228,12 @@ export default class App extends React.Component {
         p2Input: false,
       });
     } else if (
-      turn === "P1" &&
-      (phase === this.phases[2] || phase === this.phases[3])
-    ) {
-      this.setState({
-        p1Input: false,
-        p2Input: true,
-      });
-    } else if (
       turn === "P2" &&
       (phase === this.phases[0] || phase === this.phases[1])
     ) {
       this.setState({
         p1Input: false,
         p2Input: true,
-      });
-    } else if (
-      turn === "P2" &&
-      (phase === this.phases[2] || phase === this.phases[3])
-    ) {
-      this.setState({
-        p1Input: true,
-        p2Input: false,
       });
     } else {
       this.setState({
