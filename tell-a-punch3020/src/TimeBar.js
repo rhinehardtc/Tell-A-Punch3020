@@ -12,7 +12,7 @@ const TimeBar = (props) => {
             displayArr.push(1)
         }
         //Subtract HP passed in props from 10 to push 0's into the array until the total length is 10
-        for(let i = 0; i < 300 - time; i++){
+        for(let i = 0; i < 500 - time; i++){
             displayArr.push(0)
         }
     }
