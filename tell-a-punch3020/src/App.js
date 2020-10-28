@@ -167,11 +167,13 @@ export default class App extends React.Component {
 
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
+    const slap = document.getElementById('slap')
     const p1ComboInsert = (k) => {
       if (
         this.state.comboArray1.length < this.state.maxLength &&
         phase !== this.phases[2]
       ) {
+        slap.play()
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
@@ -198,6 +200,7 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
+        slap.play()
       } else {
         // Condition: comboArray2.length = 5
         if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray2, this.state.comboArray3) === false)){
