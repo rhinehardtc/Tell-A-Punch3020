@@ -168,6 +168,9 @@ export default class App extends React.Component {
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
     const slap = document.getElementById('slap')
+    const punch2 = document.getElementById('punch2')
+    const attack = document.getElementById('attack')
+    
     const p1ComboInsert = (k) => {
       if (
         this.state.comboArray1.length < this.state.maxLength &&
@@ -181,6 +184,7 @@ export default class App extends React.Component {
         // Condition: comboArray1.length = 5
         if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray1, this.state.comboArray3) === false)){
           this.setState({ p1HP: this.state.p1HP - 1})
+          attack.play()
         }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
@@ -200,11 +204,12 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
-        slap.play()
+        punch2.play()
       } else {
         // Condition: comboArray2.length = 5
         if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray2, this.state.comboArray3) === false)){
           this.setState({ p2HP: this.state.p2HP - 1})
+          attack.play()
         }
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
