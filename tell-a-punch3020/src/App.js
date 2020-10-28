@@ -40,7 +40,9 @@ export default class App extends React.Component {
       p2Time: 500,
     };
     this.slap = document.getElementById("slap");
+    this.punch = document.getElementById("punch");
     this.punch2 = document.getElementById("punch2");
+    this.attackSoundArray = [this.slap, this.punch, this.punch2]
     this.attack = document.getElementById("attack");
     this.phases = ["def", "atk", "start"];
     this.turns = { P1: "P2", P2: "P1" };
@@ -48,6 +50,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.slap.volume = 0.125;
+    this.punch.volume = 0.5;
     this.punch2.volume = 0.125;
     this.attack.volume = 0.125;
   }
@@ -192,7 +195,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray1, this.state.comboArray3) === false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
-          this.attack.play();
+          _.sample(this.attackSoundArray).play();
         }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
@@ -212,7 +215,7 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
-        this.punch2.play();
+        _.sample(this.attackSoundArray).play();
       } else {
         // Condition: comboArray2.length = 5
         if (
