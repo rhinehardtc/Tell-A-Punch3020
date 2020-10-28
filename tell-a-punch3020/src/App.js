@@ -6,6 +6,7 @@ import ComboConsole from "./ComboConsole";
 import HPBar from "./HPBar";
 import TimeBar from "./TimeBar";
 import TurnDisplay from "./TurnDisplay";
+import _ from 'lodash';
 
 export default class App extends React.Component {
   constructor() {
@@ -33,10 +34,10 @@ export default class App extends React.Component {
       phase: "start",
       p1Input: true,
       p1HP: 10,
-      p1Time: 300,
+      p1Time: 500,
       p2Input: true,
       p2HP: 10,
-      p2Time: 300,
+      p2Time: 500,
     };
   }
 
@@ -175,11 +176,13 @@ export default class App extends React.Component {
           comboArray1: [...this.state.comboArray1, k],
         });
       } else {
+        // Condition: comboArray1.length = 5
+        if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray1, this.state.comboArray3) === false)){
+          this.setState({ p1HP: this.state.p1HP - 1})
+        }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
-        if (phase === this.phases[2]) {
-          this.setState({ phase: this.phases[1] });
-        } else if (phase === this.phases[0]) {
+        if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
@@ -196,6 +199,10 @@ export default class App extends React.Component {
           comboArray2: [...this.state.comboArray2, k],
         });
       } else {
+        // Condition: comboArray2.length = 5
+        if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray2, this.state.comboArray3) === false)){
+          this.setState({ p2HP: this.state.p2HP - 1})
+        }
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
         if (phase === this.phases[0]) {
@@ -209,7 +216,9 @@ export default class App extends React.Component {
     };
 
     //take input, filter out unwanted keys, and transform into game output
-    if (p1Keys[input] && p1Input) {
+    if (phase === this.phases[2]) {
+      this.setState({ phase: this.phases[1] });
+    } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
       p2ComboInsert(p2Keys[input]);
