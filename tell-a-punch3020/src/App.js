@@ -6,7 +6,7 @@ import ComboConsole from "./ComboConsole";
 import HPBar from "./HPBar";
 import TimeBar from "./TimeBar";
 import TurnDisplay from "./TurnDisplay";
-import _ from 'lodash';
+import _ from "lodash";
 
 export default class App extends React.Component {
   constructor() {
@@ -39,6 +39,17 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 500,
     };
+    this.slap = document.getElementById("slap");
+    this.punch2 = document.getElementById("punch2");
+    this.attack = document.getElementById("attack");
+    this.phases = ["def", "atk", "start"];
+    this.turns = { P1: "P2", P2: "P1" };
+  }
+
+  componentDidMount() {
+    this.slap.volume = 0.125;
+    this.punch2.volume = 0.125;
+    this.attack.volume = 0.125;
   }
 
   startGame = () => {
@@ -130,9 +141,6 @@ export default class App extends React.Component {
     }
   };
 
-  phases = ["def", "atk", "start"];
-  turns = { P1: "P2", P2: "P1" };
-
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
@@ -140,7 +148,7 @@ export default class App extends React.Component {
   keyLogger = (event) => {
     let { phase, p1Input, p2Input } = this.state;
 
-    console.log(event);
+    console.log(this.slap.volume);
     let input = event.key;
 
     const p1Keys = {
@@ -167,24 +175,24 @@ export default class App extends React.Component {
 
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
-    const slap = document.getElementById('slap')
-    const punch2 = document.getElementById('punch2')
-    const attack = document.getElementById('attack')
-    
+
     const p1ComboInsert = (k) => {
       if (
         this.state.comboArray1.length < this.state.maxLength &&
         phase !== this.phases[2]
       ) {
-        slap.play()
+        this.slap.play();
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
       } else {
         // Condition: comboArray1.length = 5
-        if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray1, this.state.comboArray3) === false)){
-          this.setState({ p1HP: this.state.p1HP - 1})
-          attack.play()
+        if (
+          phase === this.phases[0] &&
+          _.isEqual(this.state.comboArray1, this.state.comboArray3) === false
+        ) {
+          this.setState({ p1HP: this.state.p1HP - 1 });
+          this.attack.play();
         }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
@@ -204,12 +212,15 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
-        punch2.play()
+        this.punch2.play();
       } else {
         // Condition: comboArray2.length = 5
-        if((phase === this.phases[0]) && (_.isEqual(this.state.comboArray2, this.state.comboArray3) === false)){
-          this.setState({ p2HP: this.state.p2HP - 1})
-          attack.play()
+        if (
+          phase === this.phases[0] &&
+          _.isEqual(this.state.comboArray2, this.state.comboArray3) === false
+        ) {
+          this.setState({ p2HP: this.state.p2HP - 1 });
+          this.attack.play();
         }
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
