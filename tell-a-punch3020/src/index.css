@@ -30,6 +30,12 @@ code {
 .title_banner {
   font-weight: bolder;
   font-size: 70%;
+  padding:  10px 20px 20px 20px;
+
+  border: 8px ridge red;
+  border-radius: 5px;
+
+  background-color: rgb(92, 0, 0);
 }
 
 .title_screen h3 {
@@ -44,7 +50,7 @@ code {
 
 .fight_div {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,6 +65,7 @@ code {
   flex-flow: row;
   position: sticky;
 
+  margin-top: 5%;
   padding-left: 15%;
   padding-right: 15%;
 
@@ -101,12 +108,14 @@ code {
   float: left;
   
   width: 2%;
+  height: 300px;
+
   border-radius: 5px;
   overflow-x: hidden;
 
   border: 2px ridge red;
   box-shadow: 0 0 8px rgb(255, 80, 80);
-  background-color: rgba(255, 0, 0, 0.397);
+
 }
 
 .p2_health_bar {
@@ -126,12 +135,13 @@ code {
   float: left;
   
   width: 2%;
+  height: 300px;
+
   border-radius: 5px;
   overflow-x: hidden;
 
   border: 2px ridge rgb(61, 97, 255);
   box-shadow: 0 0 10px rgb(61, 97, 255);
-  background-color: rgba(0, 0, 255, 0.384);
 }
 
 .p1_input_box {

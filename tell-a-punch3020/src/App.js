@@ -34,16 +34,19 @@ export default class App extends React.Component {
       phase: "start",
       p1Input: true,
       p1HP: 10,
-      p1Time: 500,
+      p1Time: 3000,
       p2Input: true,
       p2HP: 10,
-      p2Time: 500,
+      p2Time: 3000,
     };
     this.slap = document.getElementById("slap");
     this.punch = document.getElementById("punch");
     this.punch2 = document.getElementById("punch2");
-    this.attackSoundArray = [this.slap, this.punch, this.punch2]
+    this.attackSoundArray = [this.slap, this.punch, this.punch2];
+
     this.attack = document.getElementById("attack");
+    this.timerTick = document.getElementById("timer-tick");
+
     this.phases = ["def", "atk", "start"];
     this.turns = { P1: "P2", P2: "P1" };
   }
@@ -53,6 +56,7 @@ export default class App extends React.Component {
     this.punch.volume = 0.5;
     this.punch2.volume = 0.125;
     this.attack.volume = 0.125;
+    this.timerTick.volume = 0.5;
   }
 
   startGame = () => {
@@ -94,14 +98,6 @@ export default class App extends React.Component {
           </ol>
         </div> */}
 
-          <div className="turn_display">
-            <link
-              href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-              rel="stylesheet"
-            ></link>
-            <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
-          </div>
-
           {/* <div className="p2_button_list">
           <ol>
             {this.state.gamePad.buttons ? (
@@ -118,6 +114,13 @@ export default class App extends React.Component {
 
           <div className="health_bars_div">
             <HPBar HP={this.state.p1HP} p1={true} />
+            <div className="turn_display">
+              <link
+                href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+                rel="stylesheet">
+              </link>
+              <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
+            </div>
             <HPBar HP={this.state.p2HP} p2={true} />
           </div>
 
@@ -184,10 +187,10 @@ export default class App extends React.Component {
         this.state.comboArray1.length < this.state.maxLength &&
         phase !== this.phases[2]
       ) {
-        this.slap.play();
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
+        _.sample(this.attackSoundArray).play();
       } else {
         // Condition: comboArray1.length = 5
         if (
@@ -195,7 +198,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray1, this.state.comboArray3) === false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
-          _.sample(this.attackSoundArray).play();
+          this.attack.play();
         }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
@@ -426,11 +429,17 @@ export default class App extends React.Component {
   timeKiller = () => {
     if (this.state.started) {
       if (this.state.turn === "P1") {
-        if (this.state.p1Time > 0)
+        if (this.state.p1Time > 0) {
           this.setState({ p1Time: this.state.p1Time - 1 });
+          if(this.state.p1Time < 300 && this.state.p1Time % 2 === 0) this.timerTick.play();
+          if(this.state.p1Time < 700 && this.state.p1Time % 9 === 0) this.timerTick.play();
+        }
       } else {
-        if (this.state.p2Time > 0)
+        if (this.state.p2Time > 0) {
           this.setState({ p2Time: this.state.p2Time - 1 });
+          if(this.state.p2Time < 300 && this.state.p2Time % 2 === 0) this.timerTick.play();
+          if(this.state.p2Time < 700 && this.state.p2Time % 9 === 0) this.timerTick.play();
+        }
       }
     }
   };
