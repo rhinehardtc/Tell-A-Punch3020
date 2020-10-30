@@ -17,6 +17,8 @@ export default class App extends React.Component {
       comboArray1: [],
       comboArray2: [],
       comboArray3: [],
+      mutatedComboArray: [],
+      comboPhrase: "Attack!",
       // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
       gamePads: {
         p1: {
@@ -124,17 +126,20 @@ export default class App extends React.Component {
             <HPBar HP={this.state.p2HP} p2={true} />
           </div>
 
-          <header className="App-header">
-            <TimeBar time={this.state.p1Time} p1={true} />
-            <div className="fight_div">
-              <Frames p1={true} />
-              <ComboConsole combo={this.state.comboArray1} p1={true} />
-              {this.decideCenterColor()}
-              <ComboConsole combo={this.state.comboArray2} p2={true} />
-              <Frames p2={true} />
-            </div>
-            <TimeBar time={this.state.p2Time} p2={true} />
-          </header>
+          <div className="main_game_container">
+            <div className="combo_phrase">{this.state.comboPhrase}</div>
+            <header className="App-header">
+              <TimeBar time={this.state.p1Time} p1={true} />
+              <div className="fight_div">
+                <Frames p1={true} />
+                <ComboConsole combo={this.state.comboArray1} p1={true} />
+                {this.decideCenterColor()}
+                <ComboConsole combo={this.state.comboArray2} p2={true} />
+                <Frames p2={true} />
+              </div>
+              <TimeBar time={this.state.p2Time} p2={true} />
+            </header>
+          </div>
           <h4 className="gamepad_display">{this.state.gamePads.p1.id}</h4>
         </>
       );
@@ -146,6 +151,90 @@ export default class App extends React.Component {
       );
     }
   };
+
+  xIsY = (combo) => {
+    let newCombo = [...combo];
+    const firstSwitchIndex = _.sample([0,1,2,3,4]);
+    const secondSwitchIndex = _.sample(_.without([0,1,2,3,4], firstSwitchIndex));
+
+    const indexConversion = {
+      0: "1st",
+      1: "2nd",
+      2: "3rd",
+      3: "4th",
+      4: "5th"
+    };
+
+    newCombo[firstSwitchIndex] = combo[secondSwitchIndex];
+    newCombo[secondSwitchIndex] = combo[firstSwitchIndex];
+
+    this.setState({mutatedComboArray: newCombo});
+    this.setState({comboPhrase: `${indexConversion[firstSwitchIndex]} is ${indexConversion[secondSwitchIndex]}`});
+  };
+
+  invert = (combo) => {
+    let newCombo = [...combo];
+    const inversion = {
+      A: "Y",
+      Y: "A",
+      B: "X",
+      X: "B",
+      "▼": "▲",
+      "▲": "▼",
+      "◀︎": "▶︎",
+      "▶︎": "◀︎",
+    };
+    for (let i = 0; i < newCombo.length; i++) {
+      newCombo[i] = inversion[newCombo[i]];
+    }
+    this.setState({ mutatedComboArray: newCombo });
+    this.setState({comboPhrase: `Inverted Inputs`});
+  };
+
+  reverse = (combo) => {
+    let newCombo = [...combo];
+    this.setState({ mutatedComboArray: newCombo.reverse() });
+    this.setState({comboPhrase: `Reverse Combo`});
+  };
+
+  allOfOne = (combo) => {
+    let newCombo = [...combo];
+    let selector = _.sample([0,1,2,3,4]);
+    const indexConversion = {
+      0: "1st",
+      1: "2nd",
+      2: "3rd",
+      3: "4th",
+      4: "5th"
+    };
+    for (let i = 0; i < newCombo.length; i++) {
+      newCombo[i] = newCombo[selector];
+    }
+    this.setState({ mutatedComboArray: newCombo });
+    this.setState({comboPhrase: `All of ${indexConversion[selector]}`});
+  };
+
+  doNotTransform = (combo) => {
+    this.setState({ mutatedComboArray: combo });
+    this.setState({comboPhrase: `Unchanged`});
+  };
+
+  transformCombo = (combo) => {
+
+    const transformFunctions = [
+      this.doNotTransform,
+      this.allOfOne,
+      this.reverse,
+      this.invert,
+      this.xIsY
+    ];
+    let selector = _.sample(transformFunctions);
+
+    selector(combo);
+  };
+
+  phases = ["def", "atk", "start"];
+  turns = { P1: "P2", P2: "P1" };
 
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
@@ -195,14 +284,18 @@ export default class App extends React.Component {
         // Condition: comboArray1.length = 5
         if (
           phase === this.phases[0] &&
-          _.isEqual(this.state.comboArray1, this.state.comboArray3) === false
+          _.isEqual(this.state.comboArray1, this.state.mutatedComboArray) === false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
           this.attack.play();
         }
-        this.setState({ comboArray3: this.state.comboArray1 });
-        this.setState({ comboArray1: [] });
-        if (phase === this.phases[0]) {
+          this.setState({ comboArray3: this.state.comboArray1 });
+          phase === this.phases[1] ? this.transformCombo(this.state.comboArray1) : this.setState({comboPhrase: "Attack!"});
+          this.setState({ comboArray1: [] });
+          //change the phase here
+        if (phase === this.phases[2]) {
+          this.setState({ phase: this.phases[1] });
+        } else if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
@@ -223,13 +316,16 @@ export default class App extends React.Component {
         // Condition: comboArray2.length = 5
         if (
           phase === this.phases[0] &&
-          _.isEqual(this.state.comboArray2, this.state.comboArray3) === false
+          _.isEqual(this.state.comboArray2, this.state.mutatedComboArray) === false
         ) {
           this.setState({ p2HP: this.state.p2HP - 1 });
           this.attack.play();
         }
+        //here is where the combos are handled for phase changes
         this.setState({ comboArray3: this.state.comboArray2 });
+        phase === this.phases[1] ? this.transformCombo(this.state.comboArray2) : this.setState({comboPhrase: "Attack!"});
         this.setState({ comboArray2: [] });
+        //change the phase here
         if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });

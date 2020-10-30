@@ -48,6 +48,18 @@ code {
   }
 }
 
+.main_game_container {
+  padding-top: 5%;
+}
+
+.combo_phrase {
+  position: sticky;
+  z-index: 0;
+  color: white;
+  text-shadow: 0 0 8px rgb(255, 255, 255);
+  font-family: 'Press Start 2P';
+}
+
 .fight_div {
   background-color: #282c34;
   min-height: 80vh;
@@ -79,15 +91,7 @@ code {
   border: 1px solid white;
 }
 
-.timepoint {
-  height: 0.75px;
-}
-
 .filled_hitpoint {
-  background-color: rgba(255, 255, 255, 0.473);
-}
-
-.filled_timepoint {
   background-color: rgba(255, 255, 255, 0.473);
 }
 
