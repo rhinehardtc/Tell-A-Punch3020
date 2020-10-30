@@ -40,11 +40,6 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 3000,
     };
-    this.slap = document.getElementById("slap");
-    this.punch = document.getElementById("punch");
-    this.punch2 = document.getElementById("punch2");
-    this.attackSoundArray = [this.slap, this.punch, this.punch2];
-
     this.attack = document.getElementById("attack");
     this.timerTick = document.getElementById("timer-tick");
 
@@ -55,12 +50,15 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.sound.init();
-    let {slap, punch, punch2, attack} = this.sound
-    slap.volume = 0.125;
-    punch.volume = 0.5;
-    punch2.volume = 0.125;
-    attack.volume = 0.125;
-    console.log(JSON.stringify(this.sound))
+    // let {slap, punch, punch2, attack} = this.sound
+    // slap.volume = 0.125;
+    // punch.volume = 0.5;
+    // punch2.volume = 0.125;
+    // attack.volume = 0.125;
+  }
+
+  componentWillUnmount() {
+    this.sound.close();
   }
 
   startGame = () => {
@@ -121,8 +119,8 @@ export default class App extends React.Component {
             <div className="turn_display">
               <link
                 href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-                rel="stylesheet">
-              </link>
+                rel="stylesheet"
+              ></link>
               <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
             </div>
             <HPBar HP={this.state.p2HP} p2={true} />
@@ -435,14 +433,18 @@ export default class App extends React.Component {
       if (this.state.turn === "P1") {
         if (this.state.p1Time > 0) {
           this.setState({ p1Time: this.state.p1Time - 1 });
-          if(this.state.p1Time < 300 && this.state.p1Time % 2 === 0) this.timerTick.play();
-          if(this.state.p1Time < 700 && this.state.p1Time % 9 === 0) this.timerTick.play();
+          if (this.state.p1Time < 300 && this.state.p1Time % 2 === 0)
+            this.timerTick.play();
+          if (this.state.p1Time < 700 && this.state.p1Time % 9 === 0)
+            this.timerTick.play();
         }
       } else {
         if (this.state.p2Time > 0) {
           this.setState({ p2Time: this.state.p2Time - 1 });
-          if(this.state.p2Time < 300 && this.state.p2Time % 2 === 0) this.timerTick.play();
-          if(this.state.p2Time < 700 && this.state.p2Time % 9 === 0) this.timerTick.play();
+          if (this.state.p2Time < 300 && this.state.p2Time % 2 === 0)
+            this.timerTick.play();
+          if (this.state.p2Time < 700 && this.state.p2Time % 9 === 0)
+            this.timerTick.play();
         }
       }
     }
