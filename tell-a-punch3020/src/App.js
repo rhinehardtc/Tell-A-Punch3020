@@ -147,6 +147,67 @@ export default class App extends React.Component {
     }
   };
 
+  xIsY = (combo) => {
+    const newCombo = [...combo];
+    const firstSwitchIndex = _.sample([0,1,2,3,4]);
+    const secondSwitchIndex = _.sample(_.without([0,1,2,3,4], firstSwitchIndex));
+
+    newCombo[firstSwitchIndex] = combo[secondSwitchIndex];
+    newCombo[secondSwitchIndex] = combo[firstSwitchIndex];
+
+    this.setState({comboArray3: newCombo})
+  };
+
+  invert = (combo) => {
+    const inversion = {
+      A: "Y",
+      Y: "A",
+      B: "X",
+      X: "B",
+      "▼": "▲",
+      "▲": "▼",
+      "◀︎": "▶︎",
+      "▶︎": "◀︎",
+    };
+    for (let i = 0; i < combo.length; i++) {
+      combo[i] = inversion[combo[i]];
+    }
+    this.setState({ comboArray3: combo });
+  };
+
+  reverse = (combo) => {
+    this.setState({ comboArray3: combo.reverse() });
+  };
+
+  allOfOne = (combo) => {
+    let selector = Math.floor(Math.random() * 5 - 1);
+    for (let i = 0; i < combo.length; i++) {
+      combo[i] = combo[selector];
+    }
+    this.setState({ comboArray3: combo });
+  };
+
+  doNotTransform = (combo) => {
+    this.setState({ comboArray3: combo });
+  };
+
+  transformCombo = (combo) => {
+
+    const transformFunctions = [
+      this.doNotTransform,
+      this.allOfOne,
+      this.reverse,
+      this.invert,
+      this.xIsY
+    ];
+    let selector = _.sample(transformFunctions);
+
+    selector(combo);
+  };
+
+  phases = ["def", "atk", "start"];
+  turns = { P1: "P2", P2: "P1" };
+
   //App -> holds ALL of the state, listens to keyboard, holds keyLogger, holds update, calls reqAniFrame/update
   //update -> grabs controllers and 'listens' to their buttons, points to keyLogger, recurs w/ reqAniFrame
   //keyLogger -> handles keyboard and controller input, handles comboArr insertion
@@ -200,9 +261,12 @@ export default class App extends React.Component {
           this.setState({ p1HP: this.state.p1HP - 1 });
           this.attack.play();
         }
-        this.setState({ comboArray3: this.state.comboArray1 });
-        this.setState({ comboArray1: [] });
-        if (phase === this.phases[0]) {
+          this.transformCombo(this.state.comboArray1);
+          this.setState({ comboArray1: [] });
+          //change the phase here
+        if (phase === this.phases[2]) {
+          this.setState({ phase: this.phases[1] });
+        } else if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
@@ -228,8 +292,10 @@ export default class App extends React.Component {
           this.setState({ p2HP: this.state.p2HP - 1 });
           this.attack.play();
         }
-        this.setState({ comboArray3: this.state.comboArray2 });
+        //here is where the combos are handled for phase changes
+        this.transformCombo(this.state.comboArray2);
         this.setState({ comboArray2: [] });
+        //change the phase here
         if (phase === this.phases[0]) {
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
