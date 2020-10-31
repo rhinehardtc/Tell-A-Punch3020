@@ -6,6 +6,10 @@ class TitleScreen extends React.Component {
         this.state = {}
     }
 
+    componentDidMount(){
+        this.kd = window.addEventListener("keydown", () => this.props.startGame())
+    }
+
     banner = String.raw`
    ____________/\\\\\\\\\\\\\\\________________/\\\\\\_____/\\\\\\__________________________________________/\\\\\\\\\______________                             
     ___________\///////\\\/////________________\////\\\____\////\\\________________________________________/\\\\\\\\\\\\\____________                            
@@ -26,8 +30,6 @@ class TitleScreen extends React.Component {
          _\/\\\____________\//\\\\\\\\\__\/\\\___\/\\\__\///\\\\\\\\_\/\\\___\/\\\___________\///\\\\\\\\\/____\///\\\\\\\/____/\\\\\\\\\\\\\\\__\///\\\\\\\/___ 
           _\///______________\/////////___\///____\///_____\////////__\///____\///______________\/////////________\///////_____\///////////////_____\///////_____`;
 
-    kd = window.addEventListener("keydown", () => this.props.startGame())
-
     shouldComponentUpdate(){
         return false
     }
@@ -38,7 +40,7 @@ class TitleScreen extends React.Component {
                 <pre className="title_banner">
                     <code>{this.banner}</code>
                 </pre>
-                <h3>Press Any Key</h3>
+                <h3 className="blinking_header">Press Any Key</h3>
             </div>
         )
     }

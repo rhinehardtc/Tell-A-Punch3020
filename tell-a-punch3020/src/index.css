@@ -27,6 +27,26 @@ code {
   text-shadow: 0 0 8px rgb(255, 80, 80);
 }
 
+.p1_end_screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: red;
+  text-shadow: 0 0 8px rgb(255, 80, 80);
+}
+
+.p2_end_screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(0, 0, 255);
+  text-shadow: 0 0 10px rgb(84, 116, 255);
+}
+
 .title_banner {
   font-weight: bolder;
   font-size: 70%;
@@ -38,7 +58,29 @@ code {
   background-color: rgb(92, 0, 0);
 }
 
-.title_screen h3 {
+.p1_end_banner {
+  font-weight: bolder;
+  font-size: 70%;
+  padding:  10px 20px 20px 20px;
+
+  border: 8px ridge red;
+  border-radius: 5px;
+
+  background-color: rgb(92, 0, 0);
+}
+
+.p2_end_banner {
+  font-weight: bolder;
+  font-size: 70%;
+  padding:  10px 20px 20px 20px;
+
+  border: 8px ridge blue;
+  border-radius: 5px;
+
+  background-color: rgb(0, 6, 92);
+}
+
+.blinking_header {
   animation: blinker 2s linear infinite;
 }
 
