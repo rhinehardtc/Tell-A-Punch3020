@@ -7,6 +7,7 @@ import HPBar from "./HPBar";
 import TimeBar from "./TimeBar";
 import TurnDisplay from "./TurnDisplay";
 import _ from "lodash";
+import EndScreen from "./EndScreen";
 
 export default class App extends React.Component {
   constructor() {
@@ -65,6 +66,39 @@ export default class App extends React.Component {
     this.setState({ started: true });
   };
 
+  endGame = () => {
+    this.setState({
+      started: false,
+      maxLength: 5,
+      comboArray1: [],
+      comboArray2: [],
+      comboArray3: [],
+      mutatedComboArray: [],
+      comboPhrase: "Attack!",
+      // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
+      gamePads: {
+        p1: {
+          id: "no gamepad connected",
+          buttons: [{ pressed: "no gamepad, no buttons" }],
+        },
+        p2: {
+          id: "no gamepad connected",
+          buttons: [{ pressed: "no gamepad, no buttons" }],
+        },
+      },
+      whichBtnPress: "",
+      anyBtnPress: false,
+      turn: "P1",
+      phase: "start",
+      p1Input: true,
+      p1HP: 10,
+      p1Time: 3000,
+      p2Input: true,
+      p2HP: 10,
+      p2Time: 3000,
+    })
+  }
+
   decideCenterColor = () => {
     let { turn, phase } = this.state;
     if (
@@ -83,7 +117,11 @@ export default class App extends React.Component {
   };
 
   decideIfStarted = () => {
-    if (this.state.started) {
+    if (this.state.p1Time === 0 || this.state.p1HP === 0){
+      return <EndScreen endGame={this.endGame} p2={true}/>
+    } else if (this.state.p2Time === 0 || this.state.p2HP === 0) {
+      return <EndScreen endGame={this.endGame} p1={true}/>
+    } else if (this.state.started) {
       return (
         <>
           {/* <div className="p1_button_list">
