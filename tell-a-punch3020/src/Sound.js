@@ -3,6 +3,7 @@ import React from "react";
 export default class Sound extends React.Component {
   constructor() {
     super();
+    //setting up prefixing for AudioContext
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
   }
   audioCtx;
@@ -10,7 +11,7 @@ export default class Sound extends React.Component {
   punch;
   punch2;
   attack;
-  attackSoundArray = [this.slap, this.punch, this.punch2];
+  attackSoundArray;
   panner;
   slapGain;
   punchGain;
@@ -31,6 +32,7 @@ export default class Sound extends React.Component {
     this.attack = this.audioCtx.createMediaElementSource(
       document.getElementById("attack")
     );
+    this.attackSoundArray = [this.slap, this.punch, this.punch2];
     this.slapGain = this.audioCtx.createGain();
     this.punchGain = this.audioCtx.createGain();
     this.punch2Gain = this.audioCtx.createGain();

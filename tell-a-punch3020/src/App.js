@@ -40,7 +40,7 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 3000,
     };
-    this.attack = document.getElementById("attack");
+    // this.attack = document.getElementById("attack");
     this.timerTick = document.getElementById("timer-tick");
 
     this.phases = ["def", "atk", "start"];
@@ -50,6 +50,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.sound.init();
+    this.setState({ LOOK_HERE: this.sound.attackSoundArray });
     // let {slap, punch, punch2, attack} = this.sound
     // slap.volume = 0.125;
     // punch.volume = 0.5;
@@ -58,7 +59,7 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
-    this.sound.close();
+    this.sound.audioCtx.close();
   }
 
   startGame = () => {
@@ -155,7 +156,6 @@ export default class App extends React.Component {
 
   keyLogger = (event) => {
     let { phase, p1Input, p2Input } = this.state;
-
     let input = event.key;
 
     const p1Keys = {
@@ -188,11 +188,13 @@ export default class App extends React.Component {
         this.state.comboArray1.length < this.state.maxLength &&
         phase !== this.phases[2]
       ) {
-        this.sound.slap.play();
+        let THINGY = _.sample(this.sound.attackSoundArray);
+        console.log(THINGY.mediaElement)
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
-        _.sample(this.attackSoundArray).play();
+        THINGY.mediaElement.play()
+        _.sample(this.sound.attackSoundArray).mediaElement.play();
       } else {
         // Condition: comboArray1.length = 5
         if (
@@ -200,7 +202,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray1, this.state.comboArray3) === false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
-          _.sample(this.sound.attackSoundArray).play();
+          this.sound.attack.mediaElement.play();
         }
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
@@ -220,7 +222,7 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
-        _.sample(this.sound.attackSoundArray).play();
+        _.sample(this.sound.attackSoundArray).mediaElement.play();
       } else {
         // Condition: comboArray2.length = 5
         if (
@@ -228,7 +230,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray2, this.state.comboArray3) === false
         ) {
           this.setState({ p2HP: this.state.p2HP - 1 });
-          this.sound.attack.play();
+          this.sound.attack.mediaElement.play();
         }
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
@@ -245,6 +247,7 @@ export default class App extends React.Component {
     //take input, filter out unwanted keys, and transform into game output
     if (phase === this.phases[2]) {
       this.setState({ phase: this.phases[1] });
+      if (this.sound.state === "suspended") this.sound.resume();
     } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
