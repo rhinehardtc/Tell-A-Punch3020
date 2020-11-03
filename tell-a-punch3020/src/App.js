@@ -344,8 +344,8 @@ export default class App extends React.Component {
     if (phase === this.phases[2]) {
       this.setState({ phase: this.phases[1] });
       this.sound.panner.pan.value = -0.8;
-      if (this.sound.state === "suspended") {
-        this.sound.resume();
+      if (this.sound.audioCtx.state === "suspended") {
+        this.sound.audioCtx.resume();
       }
     } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
