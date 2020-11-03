@@ -174,7 +174,7 @@ code {
 
 .fight_div {
   background-color: #282c34;
-  min-height: 70vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: row;
   align-items: center;
