@@ -21,7 +21,6 @@ export default class App extends React.Component {
       comboArray3: [],
       mutatedComboArray: [],
       comboPhrase: "Attack!",
-      // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
       gamePads: {
         p1: {
           id: "no gamepad connected",
@@ -70,7 +69,6 @@ export default class App extends React.Component {
       comboArray3: [],
       mutatedComboArray: [],
       comboPhrase: "Attack!",
-      // gps: {p1: {id: , buttons: []}, p2: {id: , buttons: []},}
       gamePads: {
         p1: {
           id: "no gamepad connected",
@@ -119,34 +117,6 @@ export default class App extends React.Component {
     } else if (this.state.started) {
       return (
         <>
-          {/* <div className="p1_button_list">
-          <ol>
-            {this.state.gamePad.buttons ? (
-              this.state.gamePad.buttons.map((button) => (
-                <li key={this.state.gamePad.buttons.indexOf(button)}>
-                  {String(button.pressed)}
-                </li>
-              ))
-            ) : (
-              <li>"no gamepad, no buttons"</li>
-            )}
-          </ol>
-        </div> */}
-
-          {/* <div className="p2_button_list">
-          <ol>
-            {this.state.gamePad.buttons ? (
-              this.state.gamePad.buttons.map((button) => (
-                <li key={this.state.gamePad.buttons.indexOf(button)}>
-                  {String(button.pressed)}
-                </li>
-              ))
-            ) : (
-              <li>"no gamepad, no buttons"</li>
-            )}
-          </ol>
-        </div> */}
-
           <div className="health_bars_div">
             <HPBar HP={this.state.p1HP} p1={true} />
             <div className="turn_display">
@@ -297,7 +267,6 @@ export default class App extends React.Component {
       o: "◀︎",
       p: "▲",
     };
-    // const displayedInputs = ["A", "B", "X", "Y", "▼", "▶︎", "◀︎", "▲"];
 
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
