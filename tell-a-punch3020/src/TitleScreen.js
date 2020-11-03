@@ -1,16 +1,17 @@
-import React from 'react';
+import React from "react";
+import Instructions from "./Instructions";
 
 class TitleScreen extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {}
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-    componentDidMount(){
-        this.kd = window.addEventListener("keydown", () => this.props.startGame())
-    }
+  componentDidMount() {
+    this.kd = window.addEventListener("keydown", () => this.props.startGame());
+  }
 
-    banner = String.raw`
+  banner = String.raw`
    ____________/\\\\\\\\\\\\\\\________________/\\\\\\_____/\\\\\\__________________________________________/\\\\\\\\\______________                             
     ___________\///////\\\/////________________\////\\\____\////\\\________________________________________/\\\\\\\\\\\\\____________                            
      _________________\/\\\________________________\/\\\_______\/\\\_______________________________________/\\\/////////\\\___________                           
@@ -30,20 +31,34 @@ class TitleScreen extends React.Component {
          _\/\\\____________\//\\\\\\\\\__\/\\\___\/\\\__\///\\\\\\\\_\/\\\___\/\\\___________\///\\\\\\\\\/____\///\\\\\\\/____/\\\\\\\\\\\\\\\__\///\\\\\\\/___ 
           _\///______________\/////////___\///____\///_____\////////__\///____\///______________\/////////________\///////_____\///////////////_____\///////_____`;
 
-    shouldComponentUpdate(){
-        return false
-    }
-    
-    render(){
-        return (
-            <div className="title_screen">
-                <pre className="title_banner">
-                    <code>{this.banner}</code>
-                </pre>
-                <h3 className="blinking_header">Press Any Key</h3>
-            </div>
-        )
-    }
-}
+  openInstructions = () => {
+    this.setState({ instr: true });
+  };
 
-export default TitleScreen
+  goBack = () => {
+    this.setState({ instr: false });
+  };
+
+  render() {
+    if (this.state.instr) {
+      return (
+        <div className="instructions_screen">
+          <Instructions goBack={this.goBack} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="title_screen">
+          <pre className="title_banner">
+            <code>{this.banner}</code>
+          </pre>
+          <h3 className="blinking_header">Press Any Key</h3>
+          <h6 className="instructions_button" onClick={this.openInstructions}>
+            Click Here For Instructions
+          </h6>
+        </div>
+      );
+    }
+  }
+}
+export default TitleScreen;
