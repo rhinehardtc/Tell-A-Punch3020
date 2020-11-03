@@ -7,6 +7,7 @@ import HPBar from "./HPBar";
 import TimeBar from "./TimeBar";
 import TurnDisplay from "./TurnDisplay";
 import _ from "lodash";
+import Sound from "./Sound";
 import EndScreen from "./EndScreen";
 
 export default class App extends React.Component {
@@ -42,24 +43,18 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 3000,
     };
-    this.slap = document.getElementById("slap");
-    this.punch = document.getElementById("punch");
-    this.punch2 = document.getElementById("punch2");
-    this.attackSoundArray = [this.slap, this.punch, this.punch2];
-
-    this.attack = document.getElementById("attack");
-    this.timerTick = document.getElementById("timer-tick");
 
     this.phases = ["def", "atk", "start"];
     this.turns = { P1: "P2", P2: "P1" };
+    this.sound = new Sound();
   }
 
   componentDidMount() {
-    this.slap.volume = 0.125;
-    this.punch.volume = 0.5;
-    this.punch2.volume = 0.125;
-    this.attack.volume = 0.125;
-    this.timerTick.volume = 0.5;
+    this.sound.init();
+  }
+
+  componentWillUnmount() {
+    this.sound.audioCtx.close();
   }
 
   startGame = () => {
@@ -157,8 +152,8 @@ export default class App extends React.Component {
             <div className="turn_display">
               <link
                 href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-                rel="stylesheet">
-              </link>
+                rel="stylesheet"
+              ></link>
               <TurnDisplay turn={this.state.turn} phase={this.state.phase} />
             </div>
             <HPBar HP={this.state.p2HP} p2={true} />
@@ -280,8 +275,6 @@ export default class App extends React.Component {
 
   keyLogger = (event) => {
     let { phase, p1Input, p2Input } = this.state;
-
-    console.log(this.slap.volume);
     let input = event.key;
 
     const p1Keys = {
@@ -317,7 +310,7 @@ export default class App extends React.Component {
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
-        _.sample(this.attackSoundArray).play();
+        _.sample(this.sound.attackSoundArray).mediaElement.play();
       } else {
         // Condition: comboArray1.length = 5
         if (
@@ -325,7 +318,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray1, this.state.mutatedComboArray) === false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
-          this.attack.play();
+          this.sound.attack.mediaElement.play();
         }
           this.setState({ comboArray3: this.state.comboArray1 });
           phase === this.phases[1] ? this.transformCombo(this.state.comboArray1) : this.setState({comboPhrase: "Attack!"});
@@ -334,9 +327,11 @@ export default class App extends React.Component {
         if (phase === this.phases[2]) {
           this.setState({ phase: this.phases[1] });
         } else if (phase === this.phases[0]) {
+          this.sound.panner.pan.value = -0.8;
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
+          this.sound.panner.pan.value = 0.8;
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P2" });
         }
@@ -349,7 +344,7 @@ export default class App extends React.Component {
         this.setState({
           comboArray2: [...this.state.comboArray2, k],
         });
-        _.sample(this.attackSoundArray).play();
+        _.sample(this.sound.attackSoundArray).mediaElement.play();
       } else {
         // Condition: comboArray2.length = 5
         if (
@@ -357,7 +352,7 @@ export default class App extends React.Component {
           _.isEqual(this.state.comboArray2, this.state.mutatedComboArray) === false
         ) {
           this.setState({ p2HP: this.state.p2HP - 1 });
-          this.attack.play();
+          this.sound.attack.mediaElement.play();
         }
         //here is where the combos are handled for phase changes
         this.setState({ comboArray3: this.state.comboArray2 });
@@ -365,9 +360,11 @@ export default class App extends React.Component {
         this.setState({ comboArray2: [] });
         //change the phase here
         if (phase === this.phases[0]) {
+          this.sound.panner.pan.value = 0.8;
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
+          this.sound.panner.pan.value = -0.8;
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P1" });
         }
@@ -377,6 +374,10 @@ export default class App extends React.Component {
     //take input, filter out unwanted keys, and transform into game output
     if (phase === this.phases[2]) {
       this.setState({ phase: this.phases[1] });
+      this.sound.panner.pan.value = -0.8;
+      if (this.sound.state === "suspended") {
+        this.sound.resume();
+      }
     } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
@@ -565,14 +566,18 @@ export default class App extends React.Component {
       if (this.state.turn === "P1") {
         if (this.state.p1Time > 0) {
           this.setState({ p1Time: this.state.p1Time - 1 });
-          if(this.state.p1Time < 300 && this.state.p1Time % 2 === 0) this.timerTick.play();
-          if(this.state.p1Time < 700 && this.state.p1Time % 9 === 0) this.timerTick.play();
+          if (this.state.p1Time < 300 && this.state.p1Time % 2 === 0)
+            this.sound.timerTick.mediaElement.play();
+          if (this.state.p1Time < 700 && this.state.p1Time % 9 === 0)
+            this.sound.timerTick.mediaElement.play();
         }
       } else {
         if (this.state.p2Time > 0) {
           this.setState({ p2Time: this.state.p2Time - 1 });
-          if(this.state.p2Time < 300 && this.state.p2Time % 2 === 0) this.timerTick.play();
-          if(this.state.p2Time < 700 && this.state.p2Time % 9 === 0) this.timerTick.play();
+          if (this.state.p2Time < 300 && this.state.p2Time % 2 === 0)
+            this.sound.timerTick.mediaElement.play();
+          if (this.state.p2Time < 700 && this.state.p2Time % 9 === 0)
+            this.sound.timerTick.mediaElement.play();
         }
       }
     }
