@@ -27,6 +27,76 @@ code {
   text-shadow: 0 0 8px rgb(255, 80, 80);
 }
 
+.instructions_screen {
+  display: flex;
+  flex-flow: wrap;
+  color: white;
+  padding: 1%;
+}
+
+.instructions_top {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.greeting {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  width: 55%;
+  text-align: justify;
+  margin-right: 5%;
+}
+
+.demo_health_and_time_div {
+  display: flex;
+  
+  align-items: center;
+  text-align: justify;
+  justify-content: center;
+  
+  width: 100%;
+}
+
+.instructions_time_div {
+  display: flex;
+  flex-flow: row-reverse;
+
+  align-items: center;
+}
+
+.time_p {
+  width: 80%;
+  margin-left: 20px;
+}
+
+.instructions_health_div {
+  display: flex;
+  flex-flow: column;
+}
+
+.health_p {
+  width: 70%;
+}
+
+.instructions_combo_div {
+  display: flex;
+  flex-flow: row-reverse;
+  align-items: center;
+  text-align: justify;
+
+  width: 40%
+}
+
+.combo_p {
+  width: 80%;
+}
+
+.instructions_button:hover {
+  cursor: pointer;
+}
+
 .p1_end_screen {
   min-height: 100vh;
   display: flex;
@@ -104,7 +174,7 @@ code {
 
 .fight_div {
   background-color: #282c34;
-  min-height: 80vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -142,6 +212,7 @@ code {
   float: left;
 
   width: 15em;
+  height: 1.75em;
 
   border: 2px ridge red;
   box-shadow: 0 0 8px rgb(255, 80, 80);
@@ -153,7 +224,7 @@ code {
   flex-flow: column;
   float: left;
   
-  width: 2%;
+  width: 20px;
   height: 300px;
 
   border-radius: 5px;
@@ -169,6 +240,7 @@ code {
   float: right;
 
   width: 15em;
+  height: 1.75em;
 
   border: 2px ridge rgb(61, 97, 255);
   box-shadow: 0 0 10px rgb(61, 97, 255);
@@ -180,7 +252,7 @@ code {
   flex-flow: column;
   float: left;
   
-  width: 2%;
+  width: 20px;
   height: 300px;
 
   border-radius: 5px;
