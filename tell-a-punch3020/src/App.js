@@ -188,12 +188,9 @@ export default class App extends React.Component {
         this.state.comboArray1.length < this.state.maxLength &&
         phase !== this.phases[2]
       ) {
-        let THINGY = _.sample(this.sound.attackSoundArray);
-        console.log(THINGY.mediaElement)
         this.setState({
           comboArray1: [...this.state.comboArray1, k],
         });
-        THINGY.mediaElement.play()
         _.sample(this.sound.attackSoundArray).mediaElement.play();
       } else {
         // Condition: comboArray1.length = 5
@@ -207,9 +204,11 @@ export default class App extends React.Component {
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
         if (phase === this.phases[0]) {
+          this.sound.panner.pan.value = -.80
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
+          this.sound.panner.pan.value = .80
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P2" });
         }
@@ -235,9 +234,11 @@ export default class App extends React.Component {
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
         if (phase === this.phases[0]) {
+          this.sound.panner.pan.value = .80
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
+          this.sound.panner.pan.value = -.80
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P1" });
         }

@@ -37,7 +37,7 @@ export default class Sound extends React.Component {
     this.punchGain = this.audioCtx.createGain();
     this.punch2Gain = this.audioCtx.createGain();
     this.attackGain = this.audioCtx.createGain();
-    this.panner = this.audioCtx.createPanner();
+    this.panner = this.audioCtx.createStereoPanner();
     this.slap
       .connect(this.slapGain)
       .connect(this.panner)
