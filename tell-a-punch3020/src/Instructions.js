@@ -22,7 +22,7 @@ class Instructions extends React.Component {
                     Tell-A-Punch 3020 has a few key elements that come into play. Let's start with the health and time bars.
                 </p>
                 <div className="demo_health_&_time_div">
-                    <div>
+                    <div className="instructions_time_div">
                         <p className="time_p">
                             Both players have a time bar that continually
                             runs out while their turn is active.
@@ -32,7 +32,7 @@ class Instructions extends React.Component {
                         </p>
                         <TimeBar time={2500} p1={true}/>
                     </div>
-                    <div>
+                    <div className="instructions_health_div">
                         <p className="health_p">
                             Both players have a health bar, which takes
                             damage upon unsuccessful defending phases.
