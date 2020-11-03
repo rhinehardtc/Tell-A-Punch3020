@@ -40,8 +40,6 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 3000,
     };
-    // this.attack = document.getElementById("attack");
-    this.timerTick = document.getElementById("timer-tick");
 
     this.phases = ["def", "atk", "start"];
     this.turns = { P1: "P2", P2: "P1" };
@@ -50,12 +48,6 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.sound.init();
-    this.setState({ LOOK_HERE: this.sound.attackSoundArray });
-    // let {slap, punch, punch2, attack} = this.sound
-    // slap.volume = 0.125;
-    // punch.volume = 0.5;
-    // punch2.volume = 0.125;
-    // attack.volume = 0.125;
   }
 
   componentWillUnmount() {
@@ -204,11 +196,11 @@ export default class App extends React.Component {
         this.setState({ comboArray3: this.state.comboArray1 });
         this.setState({ comboArray1: [] });
         if (phase === this.phases[0]) {
-          this.sound.panner.pan.value = -.80
+          this.sound.panner.pan.value = -0.8;
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
-          this.sound.panner.pan.value = .80
+          this.sound.panner.pan.value = 0.8;
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P2" });
         }
@@ -234,11 +226,11 @@ export default class App extends React.Component {
         this.setState({ comboArray3: this.state.comboArray2 });
         this.setState({ comboArray2: [] });
         if (phase === this.phases[0]) {
-          this.sound.panner.pan.value = .80
+          this.sound.panner.pan.value = 0.8;
           this.setState({ comboArray3: [] });
           this.setState({ phase: this.phases[1] });
         } else {
-          this.sound.panner.pan.value = -.80
+          this.sound.panner.pan.value = -0.8;
           this.setState({ phase: this.phases[0] });
           this.setState({ turn: "P1" });
         }
@@ -248,7 +240,10 @@ export default class App extends React.Component {
     //take input, filter out unwanted keys, and transform into game output
     if (phase === this.phases[2]) {
       this.setState({ phase: this.phases[1] });
-      if (this.sound.state === "suspended") this.sound.resume();
+      this.sound.panner.pan.value = -0.8;
+      if (this.sound.state === "suspended") {
+        this.sound.resume();
+      }
     } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
     } else if (p2Keys[input] && p2Input) {
@@ -438,17 +433,17 @@ export default class App extends React.Component {
         if (this.state.p1Time > 0) {
           this.setState({ p1Time: this.state.p1Time - 1 });
           if (this.state.p1Time < 300 && this.state.p1Time % 2 === 0)
-            this.timerTick.play();
+            this.sound.timerTick.mediaElement.play();
           if (this.state.p1Time < 700 && this.state.p1Time % 9 === 0)
-            this.timerTick.play();
+            this.sound.timerTick.mediaElement.play();
         }
       } else {
         if (this.state.p2Time > 0) {
           this.setState({ p2Time: this.state.p2Time - 1 });
           if (this.state.p2Time < 300 && this.state.p2Time % 2 === 0)
-            this.timerTick.play();
+            this.sound.timerTick.mediaElement.play();
           if (this.state.p2Time < 700 && this.state.p2Time % 9 === 0)
-            this.timerTick.play();
+            this.sound.timerTick.mediaElement.play();
         }
       }
     }

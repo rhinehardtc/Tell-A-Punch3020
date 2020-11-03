@@ -7,6 +7,7 @@ export default class Sound extends React.Component {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
   }
   audioCtx;
+  timerTick;
   slap;
   punch;
   punch2;
@@ -20,6 +21,9 @@ export default class Sound extends React.Component {
 
   init = () => {
     this.audioCtx = new AudioContext();
+    this.timerTick = this.audioCtx.createMediaElementSource(
+      document.getElementById("timer-tick")
+    );
     this.slap = this.audioCtx.createMediaElementSource(
       document.getElementById("slap")
     );
@@ -33,21 +37,25 @@ export default class Sound extends React.Component {
       document.getElementById("attack")
     );
     this.attackSoundArray = [this.slap, this.punch, this.punch2];
-    this.slapGain = this.audioCtx.createGain();
-    this.punchGain = this.audioCtx.createGain();
-    this.punch2Gain = this.audioCtx.createGain();
+    this.comboGain = this.audioCtx.createGain();
     this.attackGain = this.audioCtx.createGain();
+    this.comboGain.gain.value = 0.15;
+    this.attackGain.gain.value = 0.25;
     this.panner = this.audioCtx.createStereoPanner();
+    this.timerTick
+      .connect(this.comboGain)
+      .connect(this.panner)
+      .connect(this.audioCtx.destination);
     this.slap
-      .connect(this.slapGain)
+      .connect(this.comboGain)
       .connect(this.panner)
       .connect(this.audioCtx.destination);
     this.punch
-      .connect(this.punchGain)
+      .connect(this.comboGain)
       .connect(this.panner)
       .connect(this.audioCtx.destination);
     this.punch2
-      .connect(this.punch2Gain)
+      .connect(this.comboGain)
       .connect(this.panner)
       .connect(this.audioCtx.destination);
     this.attack
