@@ -33,8 +33,7 @@ class Instructions extends React.Component {
                     has access to 7, 8, 9, 0, u, i, o, and p. Input from either player
                     correlates to standardized controller button displays A, B, X, Y,
                     down, right, left, and up. Tell-A-Punch 3020 has a few key
-                    elements that come into play. Let's start with the health and time
-                    bars.
+                    elements that come into play.
                     </p>
                 </div>
               <div className="instructions_combo_div">
