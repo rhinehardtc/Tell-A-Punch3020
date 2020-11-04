@@ -38,7 +38,7 @@ class Instructions extends React.Component {
                 </div>
               <div className="instructions_combo_div">
                 <p className="combo_p">
-                    In the center, between both figters, there
+                    In the center, between both fighters, there
                     are 3 combo bars. There are combo bars for
                     each player, as well as one in the center,
                     which is filled with the attacking input of
@@ -50,7 +50,7 @@ class Instructions extends React.Component {
                     After an attack has been entered, the combo
                     will appear in the center bar and a randomly
                     selected combo mutation will occur, and must
-                    be interpereted by the following player in
+                    be interpreted by the following player in
                     the defending phase to avoid damage.
                     The reverse combo mutation means the combo 
                     must be pressed in the opposite order.
