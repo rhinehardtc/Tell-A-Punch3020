@@ -12,11 +12,23 @@ export default function ComboConsole(props) {
             displayArr.push(" ")
         }
     }
+
+    function setColor() {
+        if (props.p1){
+            return displayArr.map((input) => <Input input={input} p1={true} />);
+        } else if (props.center) {
+            return displayArr.map((input) => <Input input={input} center={true} />);
+        } else {
+            return displayArr.map((input) => <Input input={input} p2={true} />);
+        }
+        
+    }
     
     fillSlots()
 return(
     <div>
-        {displayArr.map((input) => props.p1 ? <Input key={Math.random() * 10000} input={input} p1={true}/> : <Input key={Math.random() * 10000} input={input} p2={true}/>)}
+        {setColor()}
     </div>
     )
+
 }
