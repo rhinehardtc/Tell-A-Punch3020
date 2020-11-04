@@ -93,6 +93,10 @@ code {
   width: 80%;
 }
 
+.instructions_button{
+  color: rgb(92, 0, 0);
+}
+
 .instructions_button:hover {
   cursor: pointer;
 }
