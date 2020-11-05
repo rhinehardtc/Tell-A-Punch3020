@@ -282,14 +282,14 @@ export default class App extends React.Component {
       r: "K",
     }
     const p2Frames = {
-      1: "K",
-      2: "K",
-      3: "K",
-      4: "K",
-      q: "K",
-      w: "K",
-      e: "K",
-      r: "K",
+      7: "K",
+      8: "K",
+      9: "K",
+      0: "K",
+      u: "K",
+      i: "K",
+      o: "K",
+      p: "K",
     }
 
     //insert transformed inputs into comboArrays or call end-of-input function
@@ -364,7 +364,7 @@ export default class App extends React.Component {
       }
     };
 
-    const delayInMilliseconds = 300; //1 second
+    const delayInMilliseconds = 200; //1 second
 
     const resetFrame = (player) => {
       if(player === 1) this.setState({ p1Frame: "S" });
