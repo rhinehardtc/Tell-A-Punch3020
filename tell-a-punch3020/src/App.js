@@ -38,9 +38,11 @@ export default class App extends React.Component {
       p1Input: true,
       p1HP: 10,
       p1Time: 3000,
+      p1Frame: "S",
       p2Input: true,
       p2HP: 10,
       p2Time: 3000,
+      p2Frame: "S",
     };
 
     this.phases = ["def", "atk", "start"];
@@ -86,9 +88,11 @@ export default class App extends React.Component {
       p1Input: true,
       p1HP: 10,
       p1Time: 3000,
+      p1Frame: "S",
       p2Input: true,
       p2HP: 10,
       p2Time: 3000,
+      p2Frame: "S",
     })
   }
 
@@ -134,11 +138,11 @@ export default class App extends React.Component {
             <header className="App-header">
               <TimeBar time={this.state.p1Time} p1={true} />
               <div className="fight_div">
-                <Frames p1={true} />
+                <Frames p1={true} frame={this.state.p1Frame} />
                 <ComboConsole combo={this.state.comboArray1} p1={true} />
                 {this.decideCenterColor()}
                 <ComboConsole combo={this.state.comboArray2} p2={true} />
-                <Frames p2={true} />
+                <Frames p2={true} frame={this.state.p2Frame} />
               </div>
               <TimeBar time={this.state.p2Time} p2={true} />
             </header>
@@ -267,6 +271,26 @@ export default class App extends React.Component {
       o: "◀︎",
       p: "▲",
     };
+    const p1Frames = {
+      1: "K",
+      2: "K",
+      3: "K",
+      4: "K",
+      q: "K",
+      w: "K",
+      e: "K",
+      r: "K",
+    }
+    const p2Frames = {
+      7: "K",
+      8: "K",
+      9: "K",
+      0: "K",
+      u: "K",
+      i: "K",
+      o: "K",
+      p: "K",
+    }
 
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
@@ -340,6 +364,28 @@ export default class App extends React.Component {
       }
     };
 
+    const delayInMilliseconds = 200; //1 second
+
+    const resetFrame = (player) => {
+      if(player === 1) this.setState({ p1Frame: "S" });
+      if(player === 2) this.setState({ p2Frame: "S" });
+    }
+
+    const frameSet = (player, frameKey) => {
+      if(player === 1){
+        this.setState({ p1Frame: frameKey });
+        setTimeout(function() {
+          resetFrame(1)
+        }, delayInMilliseconds);
+      };
+      if(player === 2){
+        this.setState({ p2Frame: frameKey });
+        setTimeout(function() {
+          resetFrame(2)
+        }, delayInMilliseconds);
+      };
+    };
+
     //take input, filter out unwanted keys, and transform into game output
     if (phase === this.phases[2]) {
       this.setState({ phase: this.phases[1] });
@@ -349,9 +395,11 @@ export default class App extends React.Component {
       }
     } else if (p1Keys[input] && p1Input) {
       p1ComboInsert(p1Keys[input]);
+      frameSet(1, p1Frames[input]);
     } else if (p2Keys[input] && p2Input) {
       p2ComboInsert(p2Keys[input]);
-    }
+      frameSet(2, p2Frames[input]);
+    };
   };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
