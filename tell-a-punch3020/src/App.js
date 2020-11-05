@@ -88,9 +88,11 @@ export default class App extends React.Component {
       p1Input: true,
       p1HP: 10,
       p1Time: 3000,
+      p1Frame: "S",
       p2Input: true,
       p2HP: 10,
       p2Time: 3000,
+      p2Frame: "S",
     })
   }
 
@@ -362,21 +364,25 @@ export default class App extends React.Component {
       }
     };
 
-    const delayInMilliseconds = 1000; //1 second
+    const delayInMilliseconds = 300; //1 second
 
-    const resetFrame = () => {
-      this.setState({ p1Frame: "S" });
+    const resetFrame = (player) => {
+      if(player === 1) this.setState({ p1Frame: "S" });
+      if(player === 2) this.setState({ p2Frame: "S" });
     }
 
     const frameSet = (player, frameKey) => {
       if(player === 1){
         this.setState({ p1Frame: frameKey });
         setTimeout(function() {
-          resetFrame()
+          resetFrame(1)
         }, delayInMilliseconds);
       };
       if(player === 2){
         this.setState({ p2Frame: frameKey });
+        setTimeout(function() {
+          resetFrame(2)
+        }, delayInMilliseconds);
       };
     };
 
