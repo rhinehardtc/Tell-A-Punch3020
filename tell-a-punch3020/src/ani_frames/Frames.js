@@ -1,7 +1,9 @@
 import React from 'react';
 
 export default function Frames(props) {
-    const p1KickF1 = `                                                  
+    const {frame} = props;
+
+    const p1Rest = `                                                  
                                                                                                                                                                                                         
                                                                                                                                                                                                         
                                                                                                                                                                                                         
@@ -71,7 +73,7 @@ export default function Frames(props) {
 
 `;
 
-    const kickf2 = `                                                  
+    const p1Kick = `                                                  
                                                                                                                                                                                                         
                                                                                                                                                                                                         
                                                                                                                                                                                                         
@@ -141,7 +143,7 @@ export default function Frames(props) {
 
 `;
 
-    const p2KickF1 = `
+    const p2Rest = `
                                                                                                                                                                                                             
                                                                                                                                                                                                         
                                                                                                                                                                                                         
@@ -210,17 +212,27 @@ export default function Frames(props) {
                                                                                                                                                                                                         
     `
     
+    const p1FrameTable = {
+      "S": p1Rest,
+      "K": p1Kick,
+    };
+
+    const p2FrameTable = {
+      "S": p2Rest,
+      "K": p1Kick,
+    };
+
     const renderFrame = () => {
         if(props.p1){
             return (
                 <pre className="p1_frame">
-                    <code>{p1KickF1}</code>
+                    <code>{p1FrameTable[frame]}</code>
                 </pre>
             )
         } else {
             return (
                 <pre className="p2_frame">
-                    <code>{p2KickF1}</code>
+                    <code>{p2FrameTable[frame]}</code>
                 </pre>
             )
         }

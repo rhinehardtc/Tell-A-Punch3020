@@ -86,7 +86,7 @@ class Instructions extends React.Component {
                         <TimeBar time={2500} p1={true} />
                     </div>
                 </div>
-                <p className="instructions_button">Click To Go Back</p>
+                <p>Click To Go Back</p>
           </div>
         );
     }
