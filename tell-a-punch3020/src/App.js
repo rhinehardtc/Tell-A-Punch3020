@@ -489,8 +489,7 @@ export default class App extends React.Component {
             button.value === 1.0 &&
             this.state.btnPressCount < 2
           ) {
-            let btnCt = this.state.btnPressCount;
-            this.setState({ btnPressCount: (btnCt += 1) });
+            this.setState({ btnPressCount: this.state.btnPressCount + 1 });
           } else if (
             button.pressed &&
             button.value === 1.0 &&
@@ -555,8 +554,7 @@ export default class App extends React.Component {
             button.value === 1.0 &&
             this.state.btnPressCount < 2
           ) {
-            let btnCt = this.state.btnPressCount;
-            this.setState({ btnPressCount: (btnCt += 1) });
+            this.setState({ btnPressCount: this.state.btnPressCount + 1 });
           } else if (
             button.pressed &&
             button.value === 1.0 &&
