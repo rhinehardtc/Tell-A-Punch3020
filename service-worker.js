@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Tell-A-Punch3020/precache-manifest.6b327cec22eacac98350d3a0638fe750.js"
+  "/Tell-A-Punch3020/precache-manifest.742527983afd459d90de06f963752794.js"
 );
 
 self.addEventListener('message', (event) => {
