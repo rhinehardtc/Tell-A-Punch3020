@@ -31,7 +31,7 @@ export default class App extends React.Component {
           buttons: [{ pressed: "no gamepad, no buttons" }],
         },
       },
-      whichBtnPress: "",
+      btnPressCount: 0,
       anyBtnPress: false,
       turn: "P1",
       phase: "start",
@@ -81,7 +81,7 @@ export default class App extends React.Component {
           buttons: [{ pressed: "no gamepad, no buttons" }],
         },
       },
-      whichBtnPress: "",
+      btnPressCount: 0,
       anyBtnPress: false,
       turn: "P1",
       phase: "start",
@@ -93,8 +93,8 @@ export default class App extends React.Component {
       p2HP: 10,
       p2Time: 3000,
       p2Frame: "S",
-    })
-  }
+    });
+  };
 
   decideCenterColor = () => {
     let { turn, phase } = this.state;
@@ -114,10 +114,10 @@ export default class App extends React.Component {
   };
 
   decideIfStarted = () => {
-    if (this.state.p1Time === 0 || this.state.p1HP === 0){
-      return <EndScreen endGame={this.endGame} p2={true}/>
+    if (this.state.p1Time === 0 || this.state.p1HP === 0) {
+      return <EndScreen endGame={this.endGame} p2={true} />;
     } else if (this.state.p2Time === 0 || this.state.p2HP === 0) {
-      return <EndScreen endGame={this.endGame} p1={true}/>
+      return <EndScreen endGame={this.endGame} p1={true} />;
     } else if (this.state.started) {
       return (
         <>
@@ -161,22 +161,26 @@ export default class App extends React.Component {
 
   xIsY = (combo) => {
     let newCombo = [...combo];
-    const firstSwitchIndex = _.sample([0,1,2,3,4]);
-    const secondSwitchIndex = _.sample(_.without([0,1,2,3,4], firstSwitchIndex));
+    const firstSwitchIndex = _.sample([0, 1, 2, 3, 4]);
+    const secondSwitchIndex = _.sample(
+      _.without([0, 1, 2, 3, 4], firstSwitchIndex)
+    );
 
     const indexConversion = {
       0: "1st",
       1: "2nd",
       2: "3rd",
       3: "4th",
-      4: "5th"
+      4: "5th",
     };
 
     newCombo[firstSwitchIndex] = combo[secondSwitchIndex];
     newCombo[secondSwitchIndex] = combo[firstSwitchIndex];
 
-    this.setState({mutatedComboArray: newCombo});
-    this.setState({comboPhrase: `${indexConversion[firstSwitchIndex]} is ${indexConversion[secondSwitchIndex]}`});
+    this.setState({ mutatedComboArray: newCombo });
+    this.setState({
+      comboPhrase: `${indexConversion[firstSwitchIndex]} is ${indexConversion[secondSwitchIndex]}`,
+    });
   };
 
   invert = (combo) => {
@@ -195,45 +199,44 @@ export default class App extends React.Component {
       newCombo[i] = inversion[newCombo[i]];
     }
     this.setState({ mutatedComboArray: newCombo });
-    this.setState({comboPhrase: `Inverted Inputs`});
+    this.setState({ comboPhrase: `Inverted Inputs` });
   };
 
   reverse = (combo) => {
     let newCombo = [...combo];
     this.setState({ mutatedComboArray: newCombo.reverse() });
-    this.setState({comboPhrase: `Reverse Combo`});
+    this.setState({ comboPhrase: `Reverse Combo` });
   };
 
   allOfOne = (combo) => {
     let newCombo = [...combo];
-    let selector = _.sample([0,1,2,3,4]);
+    let selector = _.sample([0, 1, 2, 3, 4]);
     const indexConversion = {
       0: "1st",
       1: "2nd",
       2: "3rd",
       3: "4th",
-      4: "5th"
+      4: "5th",
     };
     for (let i = 0; i < newCombo.length; i++) {
       newCombo[i] = newCombo[selector];
     }
     this.setState({ mutatedComboArray: newCombo });
-    this.setState({comboPhrase: `All of ${indexConversion[selector]}`});
+    this.setState({ comboPhrase: `All of ${indexConversion[selector]}` });
   };
 
   doNotTransform = (combo) => {
     this.setState({ mutatedComboArray: combo });
-    this.setState({comboPhrase: `Unchanged`});
+    this.setState({ comboPhrase: `Unchanged` });
   };
 
   transformCombo = (combo) => {
-
     const transformFunctions = [
       this.doNotTransform,
       this.allOfOne,
       this.reverse,
       this.invert,
-      this.xIsY
+      this.xIsY,
     ];
     let selector = _.sample(transformFunctions);
 
@@ -280,7 +283,7 @@ export default class App extends React.Component {
       w: "K",
       e: "K",
       r: "K",
-    }
+    };
     const p2Frames = {
       7: "K",
       8: "K",
@@ -290,7 +293,7 @@ export default class App extends React.Component {
       i: "K",
       o: "K",
       p: "K",
-    }
+    };
 
     //insert transformed inputs into comboArrays or call end-of-input function
     //Player 1
@@ -308,15 +311,18 @@ export default class App extends React.Component {
         // Condition: comboArray1.length = 5
         if (
           phase === this.phases[0] &&
-          _.isEqual(this.state.comboArray1, this.state.mutatedComboArray) === false
+          _.isEqual(this.state.comboArray1, this.state.mutatedComboArray) ===
+            false
         ) {
           this.setState({ p1HP: this.state.p1HP - 1 });
           this.sound.attack.mediaElement.play();
         }
-          this.setState({ comboArray3: this.state.comboArray1 });
-          phase === this.phases[1] ? this.transformCombo(this.state.comboArray1) : this.setState({comboPhrase: "Attack!"});
-          this.setState({ comboArray1: [] });
-          //change the phase here
+        this.setState({ comboArray3: this.state.comboArray1 });
+        phase === this.phases[1]
+          ? this.transformCombo(this.state.comboArray1)
+          : this.setState({ comboPhrase: "Attack!" });
+        this.setState({ comboArray1: [] });
+        //change the phase here
         if (phase === this.phases[2]) {
           this.setState({ phase: this.phases[1] });
         } else if (phase === this.phases[0]) {
@@ -342,14 +348,17 @@ export default class App extends React.Component {
         // Condition: comboArray2.length = 5
         if (
           phase === this.phases[0] &&
-          _.isEqual(this.state.comboArray2, this.state.mutatedComboArray) === false
+          _.isEqual(this.state.comboArray2, this.state.mutatedComboArray) ===
+            false
         ) {
           this.setState({ p2HP: this.state.p2HP - 1 });
           this.sound.attack.mediaElement.play();
         }
         //here is where the combos are handled for phase changes
         this.setState({ comboArray3: this.state.comboArray2 });
-        phase === this.phases[1] ? this.transformCombo(this.state.comboArray2) : this.setState({comboPhrase: "Attack!"});
+        phase === this.phases[1]
+          ? this.transformCombo(this.state.comboArray2)
+          : this.setState({ comboPhrase: "Attack!" });
         this.setState({ comboArray2: [] });
         //change the phase here
         if (phase === this.phases[0]) {
@@ -367,27 +376,28 @@ export default class App extends React.Component {
     const delayInMilliseconds = 200; //1 second
 
     const resetFrame = (player) => {
-      if(player === 1) this.setState({ p1Frame: "S" });
-      if(player === 2) this.setState({ p2Frame: "S" });
-    }
+      if (player === 1) this.setState({ p1Frame: "S" });
+      if (player === 2) this.setState({ p2Frame: "S" });
+    };
 
     const frameSet = (player, frameKey) => {
-      if(player === 1){
+      if (player === 1) {
         this.setState({ p1Frame: frameKey });
-        setTimeout(function() {
-          resetFrame(1)
+        setTimeout(function () {
+          resetFrame(1);
         }, delayInMilliseconds);
-      };
-      if(player === 2){
+      }
+      if (player === 2) {
         this.setState({ p2Frame: frameKey });
-        setTimeout(function() {
-          resetFrame(2)
+        setTimeout(function () {
+          resetFrame(2);
         }, delayInMilliseconds);
-      };
+      }
     };
 
     //take input, filter out unwanted keys, and transform into game output
     if (phase === this.phases[2]) {
+      this.startGame();
       this.setState({ phase: this.phases[1] });
       this.sound.panner.pan.value = -0.8;
       if (this.sound.audioCtx.state === "suspended") {
@@ -399,7 +409,7 @@ export default class App extends React.Component {
     } else if (p2Keys[input] && p2Input) {
       p2ComboInsert(p2Keys[input]);
       frameSet(2, p2Frames[input]);
-    };
+    }
   };
 
   connectedController = window.addEventListener("gamepadconnected", (e) => {
@@ -477,10 +487,14 @@ export default class App extends React.Component {
           if (
             button.pressed &&
             button.value === 1.0 &&
-            this.state.whichBtnPress !== button
+            this.state.btnPressCount < 2
           ) {
-            this.setState({ whichBtnPress: button });
-
+            this.setState({ btnPressCount: this.state.btnPressCount + 1 });
+          } else if (
+            button.pressed &&
+            button.value === 1.0 &&
+            this.state.btnPressCount >= 2
+          ) {
             const p1Translate = {
               0: { key: "1" },
               1: { key: "2" },
@@ -495,12 +509,12 @@ export default class App extends React.Component {
             this.keyLogger(
               p1Translate[this.state.gamePads.p1.buttons.indexOf(button)]
             );
-            this.setState({ whichBtnPress: "" });
+            this.setState({ btnPressCount: 0 });
           }
         });
         this.setState({ anyBtnPress: false });
       } else {
-        this.setState({ whichBtnPress: "" });
+        this.setState({ btnPressCount: 0 });
       }
     } else {
       this.setState((prevState) => ({
@@ -538,10 +552,14 @@ export default class App extends React.Component {
           if (
             button.pressed &&
             button.value === 1.0 &&
-            this.state.whichBtnPress !== button
+            this.state.btnPressCount < 2
           ) {
-            this.setState({ whichBtnPress: button });
-
+            this.setState({ btnPressCount: this.state.btnPressCount + 1 });
+          } else if (
+            button.pressed &&
+            button.value === 1.0 &&
+            this.state.btnPressCount >= 2
+          ) {
             const p2Translate = {
               0: { key: "7" },
               1: { key: "8" },
@@ -556,13 +574,11 @@ export default class App extends React.Component {
             this.keyLogger(
               p2Translate[this.state.gamePads.p2.buttons.indexOf(button)]
             );
-
-            this.setState({ whichBtnPress: "" });
           }
         });
         this.setState({ anyBtnPress: false });
       } else {
-        this.setState({ whichBtnPress: "" });
+        this.setState({ btnPressCount: 0 });
       }
     } else {
       this.setState((prevState) => ({
